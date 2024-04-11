@@ -9,6 +9,7 @@ import {
 
 import theme from './src/theme'
 
+import { SignIn } from './src/screens/SignIn'
 import { Loading } from './src/components/Loading'
 
 export default function App() {
@@ -21,10 +22,12 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <StatusBar
-        barStyle="light-content"
+        barStyle="dark-content"
         backgroundColor="transparent"
         translucent
       />
+
+      <SignIn />
     </ThemeProvider>
   )
 }
