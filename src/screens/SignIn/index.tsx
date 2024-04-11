@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Container, Slogan, Title } from './styles'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { Realm, useApp } from '@realm/react'
 
 import { Button } from '../../components/Button'
 
@@ -15,6 +16,7 @@ GoogleSignin.configure({
 
 export function SignIn() {
   const [isAutenticating, setIsAuthenticanting] = useState(false)
+  const app = useApp()
 
   async function handleGoogleSignIn() {
     try {
@@ -23,6 +25,9 @@ export function SignIn() {
       const { idToken } = await GoogleSignin.signIn()
 
       if (idToken) {
+        const credentials = Realm.Credentials.jwt(idToken)
+
+        await app.logIn(credentials)
       } else {
         Alert.alert(
           'Entrar',
@@ -43,7 +48,11 @@ export function SignIn() {
 
       <Slogan>Gestão de finanças</Slogan>
 
-      <Button title="Entrar com o Google" onPress={handleGoogleSignIn} />
+      <Button
+        title="Entrar com o Google"
+        onPress={handleGoogleSignIn}
+        isLoading={isAutenticating}
+      />
     </Container>
   )
 }
