@@ -15,3 +15,8 @@ export const Title = styled.Text`
   font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `
+
+export const Loading = styled.ActivityIndicator.attrs(({ theme }) => ({
+  color: theme.COLORS.WHITE,
+  size: 28,
+}))``
