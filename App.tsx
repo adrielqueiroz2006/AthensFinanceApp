@@ -10,7 +10,7 @@ import {
 
 import theme from './src/theme'
 
-import { REALM_APP_ID } from '@env'
+const REALM_APP_ID: string = process.env.REALM_APP_ID || ''
 
 import { Home } from './src/screens/Home'
 import { SignIn } from './src/screens/SignIn'
@@ -27,7 +27,7 @@ export default function App() {
     <AppProvider id={REALM_APP_ID}>
       <ThemeProvider theme={theme}>
         <StatusBar
-          barStyle="dark-content"
+          barStyle="light-content"
           backgroundColor="transparent"
           translucent
         />

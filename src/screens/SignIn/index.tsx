@@ -1,11 +1,22 @@
-import { useState } from 'react'
-import { Container, Slogan, Title } from './styles'
+import { useEffect, useState } from 'react'
+import {
+  ButtonWrapper,
+  Container,
+  Logo,
+  Slogan,
+  Title,
+  Wrapper,
+} from './styles'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { Realm, useApp } from '@realm/react'
 
+import LogoIcon from '../../../assets/icon.png'
+
 import { Button } from '../../components/Button'
 
-import { WEB_CLIENT_ID, IOS_CLIENT_ID } from '@env'
+const WEB_CLIENT_ID = process.env.WEB_CLIENT_ID
+const IOS_CLIENT_ID = process.env.IOS_CLIENT_ID
+
 import { Alert } from 'react-native'
 
 GoogleSignin.configure({
@@ -17,6 +28,10 @@ GoogleSignin.configure({
 export function SignIn() {
   const [isAutenticating, setIsAuthenticanting] = useState(false)
   const app = useApp()
+
+  useEffect(() => {
+    GoogleSignin.signOut()
+  }, [])
 
   async function handleGoogleSignIn() {
     try {
@@ -44,15 +59,21 @@ export function SignIn() {
 
   return (
     <Container>
-      <Title>Athens Finance</Title>
+      <Wrapper>
+        <Logo source={LogoIcon} />
 
-      <Slogan>Gestão de finanças</Slogan>
+        <Title>Athens Finance</Title>
 
-      <Button
-        title="Entrar com o Google"
-        onPress={handleGoogleSignIn}
-        isLoading={isAutenticating}
-      />
+        <Slogan>Gestão de finanças</Slogan>
+      </Wrapper>
+
+      <ButtonWrapper>
+        <Button
+          title="Entrar com o Google"
+          onPress={handleGoogleSignIn}
+          isLoading={isAutenticating}
+        />
+      </ButtonWrapper>
     </Container>
   )
 }
