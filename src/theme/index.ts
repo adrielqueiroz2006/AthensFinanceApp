@@ -4,8 +4,12 @@ export default {
 
     BRAND_LIGHT: '#EDDDB8',
     BRAND_MID: '#DCC080',
+    BRAND_NORMAL: '#D3B264',
     BRAND_DARK: '#CAA347',
     BRAND_DARKER: '#B8860E',
+
+    GREEN: '#009346',
+    RED: '#ce2b37',
 
     GRAY_100: '#F6F6F6',
     GRAY_200: '#E1E1E6',
@@ -18,8 +22,8 @@ export default {
     GRAY_900: '#202024',
   },
   FONT_FAMILY: {
-    REGULAR: 'Roboto_400Regular',
-    BOLD: 'Roboto_700Bold',
+    REGULAR: 'Inter_400Regular',
+    BOLD: 'Inter_700Bold',
   },
 
   FONT_SIZE: {

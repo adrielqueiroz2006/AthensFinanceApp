@@ -4,9 +4,13 @@ import { Image } from 'expo-image'
 export const Container = styled.View`
   width: 100%;
   padding: 32px;
+  padding-bottom: 28px;
   flex-direction: row;
   align-items: center;
   background-color: ${({ theme }) => theme.COLORS.WHITE};
+
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
 `
 
 export const Greeting = styled.View`
@@ -15,13 +19,13 @@ export const Greeting = styled.View`
 `
 
 export const Message = styled.Text`
-  color: ${({ theme }) => theme.COLORS.BRAND_MID};
-  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
+  color: ${({ theme }) => theme.COLORS.GRAY_800};
+  font-size: ${({ theme }) => theme.FONT_SIZE.SM}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
 `
 
 export const Name = styled.Text`
-  color: ${({ theme }) => theme.COLORS.BRAND_MID};
+  color: ${({ theme }) => theme.COLORS.BRAND_NORMAL};
   font-size: ${({ theme }) => theme.FONT_SIZE.LG}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `
@@ -29,5 +33,5 @@ export const Name = styled.Text`
 export const Picture = styled(Image)`
   width: 54px;
   height: 54px;
-  border-radius: 7px;
+  border-radius: 12px;
 `

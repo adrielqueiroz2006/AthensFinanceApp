@@ -10,14 +10,14 @@ import {
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { Realm, useApp } from '@realm/react'
 
-import LogoIcon from '../../../assets/icon.png'
+import LogoIcon from '../../assets/app-logo.png'
 
 import { Button } from '../../components/Button'
 
 const WEB_CLIENT_ID = process.env.WEB_CLIENT_ID
 const IOS_CLIENT_ID = process.env.IOS_CLIENT_ID
 
-import { Alert } from 'react-native'
+import { Alert, StatusBar } from 'react-native'
 
 GoogleSignin.configure({
   scopes: ['email', 'profile'],
@@ -59,6 +59,11 @@ export function SignIn() {
 
   return (
     <Container>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <Wrapper>
         <Logo source={LogoIcon} />
 

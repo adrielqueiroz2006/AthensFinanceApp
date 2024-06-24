@@ -1,23 +1,27 @@
+import 'react-native-get-random-values'
+
 import { ThemeProvider } from 'styled-components/native'
 import { StatusBar } from 'react-native'
 import { AppProvider, UserProvider } from '@realm/react'
 
 import {
   useFonts,
-  Roboto_400Regular,
-  Roboto_700Bold,
-} from '@expo-google-fonts/roboto'
+  Inter_400Regular,
+  Inter_700Bold,
+} from '@expo-google-fonts/inter'
 
 import theme from './src/theme'
 
 const REALM_APP_ID: string = process.env.REALM_APP_ID || ''
 
-import { Home } from './src/screens/Home'
+import { RealmProvider } from './src/libs/realm'
+
+import { Routes } from './src/routes'
 import { SignIn } from './src/screens/SignIn'
 import { Loading } from './src/components/Loading'
 
 export default function App() {
-  const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold })
+  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_700Bold })
 
   if (!fontsLoaded) {
     return <Loading />
@@ -27,12 +31,14 @@ export default function App() {
     <AppProvider id={REALM_APP_ID}>
       <ThemeProvider theme={theme}>
         <StatusBar
-          barStyle="light-content"
+          barStyle="dark-content"
           backgroundColor="transparent"
           translucent
         />
         <UserProvider fallback={SignIn}>
-          <Home />
+          <RealmProvider>
+            <Routes />
+          </RealmProvider>
         </UserProvider>
       </ThemeProvider>
     </AppProvider>

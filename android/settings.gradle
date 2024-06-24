@@ -1,4 +1,4 @@
-rootProject.name = 'athensfinance'
+rootProject.name = 'Athens Finance'
 
 dependencyResolutionManagement {
   versionCatalogs {

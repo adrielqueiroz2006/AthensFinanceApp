@@ -7,7 +7,7 @@ export const Container = styled.TouchableOpacity`
   border-radius: 6px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.COLORS.BRAND_MID};
+  background-color: ${({ theme }) => theme.COLORS.BRAND_NORMAL};
 `
 
 export const Title = styled.Text`

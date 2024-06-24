@@ -11,7 +11,7 @@ export const Wrapper = styled.View`
   justify-content: center;
   align-items: center;
 
-  height: 76%;
+  height: 78%;
 
   background: rgba(0, 0, 0, 0.5);
 `
@@ -40,7 +40,7 @@ export const Slogan = styled.Text`
 export const ButtonWrapper = styled.View`
   flex: 1;
   justify-content: center;
-  padding: 52px;
+  padding: 48px;
   margin-top: -15px;
 
   border-top-left-radius: 15px;

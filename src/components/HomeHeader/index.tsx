@@ -1,5 +1,5 @@
 import { TouchableOpacity } from 'react-native'
-import { Power } from 'phosphor-react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import { useUser, useApp } from '@realm/react'
 
@@ -23,13 +23,17 @@ export function HomeHeader() {
       />
 
       <Greeting>
-        <Message>Olá</Message>
+        <Message>Seja bem-vindo,</Message>
 
         <Name>{user?.profile.name}</Name>
       </Greeting>
 
       <TouchableOpacity activeOpacity={0.7} onPress={handleLogOut}>
-        <Power size={32} color={theme.COLORS.BRAND_DARKER} />
+        <Icon
+          name="arrow-forward-ios"
+          size={22}
+          color={theme.COLORS.GRAY_900}
+        />
       </TouchableOpacity>
     </Container>
   )
