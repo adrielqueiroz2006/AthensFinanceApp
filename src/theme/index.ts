@@ -11,7 +11,7 @@ export default {
     GREEN: '#009346',
     RED: '#ce2b37',
 
-    GRAY_100: '#F6F6F6',
+    GRAY_100: '#F1F1F1',
     GRAY_200: '#E1E1E6',
     GRAY_300: '#C4C4CC',
     GRAY_400: '#8D8D99',

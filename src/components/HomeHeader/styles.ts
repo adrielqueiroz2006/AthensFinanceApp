@@ -2,6 +2,10 @@ import styled from 'styled-components/native'
 import { Image } from 'expo-image'
 
 export const Container = styled.View`
+  background-color: ${({ theme }) => theme.COLORS.GRAY_100};
+`
+
+export const Wrapper = styled.View`
   width: 100%;
   padding: 32px;
   padding-bottom: 28px;

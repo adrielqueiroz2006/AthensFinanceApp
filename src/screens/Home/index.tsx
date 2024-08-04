@@ -1,6 +1,6 @@
 import 'react-native-get-random-values'
 
-import { Container, Wrapper } from './styles'
+// import { Container, Wrapper } from './styles'
 
 import { HomeHeader } from '../../components/HomeHeader'
 import { Button } from '../../components/Button'
@@ -12,6 +12,8 @@ import { Alert, ScrollView, Text } from 'react-native'
 import { useEffect, useState } from 'react'
 import { useQuery, useRealm } from '../../libs/realm'
 import { UserDetails } from '../../libs/realm/schemas/UserDetails'
+import { Container } from '../../components/Container'
+import { Wrapper } from '../../components/Wrapper'
 
 export function Home() {
   // const realm = useRealm()
@@ -66,7 +68,6 @@ export function Home() {
   return (
     <Container>
       <HomeHeader />
-
       <ScrollView>
         <Wrapper>
           <FinancesCard />
