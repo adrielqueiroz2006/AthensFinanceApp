@@ -10,7 +10,6 @@ import {
 } from './styles'
 
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import theme from '../../theme'
 
 type Props = {
   date: string
@@ -30,7 +29,7 @@ export function TransactionsCard({
   return (
     <Container>
       <IconContainer>
-        <Icon name={icon} size={15} color={theme.COLORS.WHITE} />
+        <Icon name={icon} size={15} color="#fff" />
       </IconContainer>
 
       <DetailsContainer>

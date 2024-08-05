@@ -1,10 +1,13 @@
 import React from 'react'
 import { Container, IconWrapper, Title, Value, Wrapper } from './styles'
 
+import { useTheme } from 'styled-components/native'
+
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import theme from '../../theme'
 
 export function FinancesCard() {
+  const themes = useTheme()
+
   return (
     <Container>
       <Wrapper>
@@ -15,7 +18,7 @@ export function FinancesCard() {
         <Icon
           name="arrow-forward-ios"
           size={15}
-          color={theme.COLORS.GRAY_900}
+          color={themes.COLORS.GRAY_900}
         />
       </IconWrapper>
     </Container>

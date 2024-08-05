@@ -1,7 +1,6 @@
 import React from 'react'
 import { Container, Title } from './styles'
 import { TransactionsCard } from '../TransactionsCard'
-import { FlatList, ScrollView } from 'react-native'
 import { PriceStyleProps } from '../TransactionsCard/styles'
 
 type Props = {

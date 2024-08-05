@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
-import theme from '../../theme'
+import themes from '../../theme/light'
 
 import { Ganhos } from './ganhos'
 import { Gastos } from './gastos'
@@ -21,14 +21,14 @@ function TabTop() {
     <Tab.Navigator
       screenOptions={{
         lazy: true,
-        tabBarActiveTintColor: theme.COLORS.BRAND_DARK,
-        tabBarLabelStyle: { color: theme.COLORS.GRAY_900 },
+        tabBarActiveTintColor: themes.COLORS.BRAND_DARK,
+        tabBarLabelStyle: { color: themes.COLORS.GRAY_900 },
 
         tabBarStyle: {
-          backgroundColor: theme.COLORS.GRAY_100,
+          backgroundColor: themes.COLORS.GRAY_100,
         },
         tabBarIndicatorStyle: {
-          backgroundColor: theme.COLORS.BRAND_DARK,
+          backgroundColor: themes.COLORS.BRAND_DARK,
         },
         swipeEnabled: false,
         animationEnabled: true,
@@ -54,7 +54,7 @@ export function Transactions() {
       <Header>
         <Title>Transações</Title>
         <Button>
-          <Icon name="plus" color={theme.COLORS.WHITE} size={15} />
+          <Icon name="plus" color={themes.COLORS.WHITE} size={15} />
         </Button>
       </Header>
 

@@ -1,15 +1,23 @@
-import { TouchableOpacity } from 'react-native'
+import { Switch, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import { useUser, useApp } from '@realm/react'
 
-import { Container, Greeting, Message, Name, Picture, Wrapper } from './styles'
+import { ThemeContext, ThemeType } from '../../theme/Theme'
 
-import theme from '../../theme'
+import { Container, Greeting, Message, Name, Picture, Wrapper } from './styles'
+import { useTheme } from 'styled-components/native'
+import { useContext } from 'react'
 
 export function HomeHeader() {
   const user = useUser()
   const app = useApp()
+
+  const themes = useTheme()
+
+  const { toggleTheme, theme } = useContext(ThemeContext)
+
+  const isDarkTheme = theme === ThemeType.dark
 
   function handleLogOut() {
     app.currentUser?.logOut()
@@ -29,11 +37,22 @@ export function HomeHeader() {
           <Name>{user?.profile.name}</Name>
         </Greeting>
 
+        <Switch
+          value={isDarkTheme}
+          onValueChange={toggleTheme}
+          thumbColor={themes.COLORS.GRAY_900}
+          trackColor={{
+            false: themes.COLORS.GRAY_300,
+            true: themes.COLORS.GRAY_300,
+          }}
+          style={{ marginRight: 15 }}
+        />
+
         <TouchableOpacity activeOpacity={0.7} onPress={handleLogOut}>
           <Icon
             name="arrow-forward-ios"
             size={22}
-            color={theme.COLORS.GRAY_900}
+            color={themes.COLORS.GRAY_900}
           />
         </TouchableOpacity>
       </Wrapper>

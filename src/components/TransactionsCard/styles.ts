@@ -36,7 +36,7 @@ export const DetailTitle = styled.Text`
 
 export const DetailDate = styled.Text`
   font-size: ${({ theme }) => theme.FONT_SIZE.XS}px;
-  color: ${({ theme }) => theme.COLORS.GRAY_600};
+  color: ${({ theme }) => theme.COLORS.GRAY_900};
 `
 
 export const Price = styled.Text<Props>`
