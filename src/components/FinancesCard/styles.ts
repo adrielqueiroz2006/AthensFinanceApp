@@ -3,7 +3,7 @@ import styled from 'styled-components/native'
 export const Container = styled.TouchableOpacity`
   border-radius: 16px;
   flex-direction: row;
-  background-color: ${({ theme }) => theme.COLORS.WHITE};
+  background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
 `
 
 export const Wrapper = styled.View`

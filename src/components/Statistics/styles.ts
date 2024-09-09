@@ -9,7 +9,7 @@ export const Wrapper = styled.View`
   margin-top: 10px;
   border-radius: 16px;
   flex-direction: row;
-  background-color: ${({ theme }) => theme.COLORS.WHITE};
+  background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
 `
 
 export const Title = styled.Text`
@@ -41,5 +41,5 @@ export const Info = styled.Text`
 
   font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
-  color: ${({ theme }) => theme.COLORS.WHITE};
+  color: ${({ theme }) => theme.COLORS.BACKGROUND};
 `

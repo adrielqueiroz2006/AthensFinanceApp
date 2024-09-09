@@ -1,6 +1,13 @@
 import { TouchableOpacity } from 'react-native'
 import styled from 'styled-components/native'
 
+export const Header = styled.View`
+  padding: 22px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`
+
 export const Title = styled.Text`
   font-size: ${({ theme }) => theme.FONT_SIZE.XXL}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
@@ -13,7 +20,7 @@ export const Button = styled(TouchableOpacity)`
   height: 40px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.COLORS.BRAND_NORMAL};
+  background-color: ${({ theme }) => theme.COLORS.BRAND_MID};
 `
 
 export const TabWrapper = styled.View`

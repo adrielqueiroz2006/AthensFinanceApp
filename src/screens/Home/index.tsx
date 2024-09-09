@@ -3,19 +3,43 @@ import 'react-native-get-random-values'
 // import { Container, Wrapper } from './styles'
 
 import { HomeHeader } from '../../components/HomeHeader'
-import { Button } from '../../components/Button'
 import { FinancesCard } from '../../components/FinancesCard'
 import { Transactions } from '../../components/Transactions'
 import { Statistics } from '../../components/Statistics'
-
-import { Alert, ScrollView, Text } from 'react-native'
-import { useEffect, useState } from 'react'
-import { useQuery, useRealm } from '../../libs/realm'
-import { UserDetails } from '../../libs/realm/schemas/UserDetails'
 import { Container } from '../../components/Container'
 import { Wrapper } from '../../components/Wrapper'
 
+import { Alert, ScrollView, StatusBar, Text } from 'react-native'
+import { useCallback, useEffect, useState } from 'react'
+import { useQuery, useRealm } from '../../libs/realm'
+import { UserDetails } from '../../libs/realm/schemas/UserDetails'
+import { useTheme } from 'styled-components'
+import { exchangeGetAll } from '../../storage/exchanges/exchangeGetAll'
+import { useFocusEffect } from '@react-navigation/native'
+
+// import { PriceStyleProps } from '../../components/TransactionsCard/styles'
+
+type TypeStyleProps = 'GANHO' | 'GASTO'
+
+export type ExchangeProps = {
+  id: string
+  category: string
+  type: TypeStyleProps
+  date: string
+  price: string
+}
+
+// export type ExchangeProps = {
+//   date: string
+//   value: string
+//   details: string
+//   icon: string
+//   type: PriceStyleProps
+// }
+
 export function Home() {
+  const themes = useTheme()
+
   // const realm = useRealm()
 
   // const userDetails = useQuery(UserDetails)
@@ -65,18 +89,56 @@ export function Home() {
   //   fetchUser()
   // }, [])
 
+  const [exchanges, setExchanges] = useState<ExchangeProps[]>([])
+
+  async function fetchExchanges() {
+    try {
+      const data = await exchangeGetAll()
+      setExchanges(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchExchanges()
+    }, [])
+  )
+
+  const incomes = exchanges.filter((item) => item.type === 'GANHO')
+  const totalIncomes = incomes.reduce(
+    (total, item) => total + parseFloat(item.price),
+    0
+  )
+
+  const expenses = exchanges.filter((item) => item.type === 'GASTO')
+  const totalExpenses = expenses.reduce(
+    (total, item) => total + parseFloat(item.price),
+    0
+  )
+
   return (
     <Container>
+      <StatusBar
+        barStyle={
+          themes.COLORS.BACKGROUND === '#080808'
+            ? 'light-content'
+            : 'dark-content'
+        }
+        backgroundColor="transparent"
+        translucent
+      />
       <HomeHeader />
-      <ScrollView>
-        <Wrapper>
-          <FinancesCard />
+      <Wrapper>
+        <ScrollView>
+          <FinancesCard income={totalIncomes} expense={totalExpenses} />
 
           <Transactions />
 
           <Statistics />
-        </Wrapper>
-      </ScrollView>
+        </ScrollView>
+      </Wrapper>
 
       {/* <Button title="Cadastrar" isLoading={isLoaded} onPress={onCadastrar} />
       <Text>{nome}</Text>

@@ -13,7 +13,7 @@ export function Container({ children }: Props) {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: themes.COLORS.WHITE,
+      backgroundColor: themes.COLORS.BACKGROUND,
     } as ViewStyle,
   })
 

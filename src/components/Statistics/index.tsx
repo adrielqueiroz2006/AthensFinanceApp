@@ -28,14 +28,14 @@ export function Statistics() {
             activeStrokeWidth={20}
             inActiveStrokeWidth={20}
             showProgressValue={false}
-            activeStrokeColor={themes.COLORS.BRAND_NORMAL}
+            activeStrokeColor={themes.COLORS.BRAND_MID}
             inActiveStrokeColor={themes.COLORS.GRAY_900}
           />
         </CircularProgressContainer>
 
         <NumbersContainer>
           <RowContainer>
-            <Icon name="circle" size={15} color={themes.COLORS.BRAND_NORMAL} />
+            <Icon name="circle" size={15} color={themes.COLORS.BRAND_MID} />
             <Info style={{ color: themes.COLORS.GRAY_900 }}>Pago (58.3%)</Info>
           </RowContainer>
 

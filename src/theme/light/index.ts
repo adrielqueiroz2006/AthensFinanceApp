@@ -2,18 +2,16 @@ import { DefaultTheme } from 'styled-components'
 
 const lightTheme: DefaultTheme = {
   COLORS: {
-    WHITE: '#FFFFFF',
+    BACKGROUND: '#FFFFFF',
 
-    BRAND_LIGHT: '#EDDDB8',
-    BRAND_MID: '#DCC080',
-    BRAND_NORMAL: '#D3B264',
+    BRAND_LIGHT: '#DCC080',
+    BRAND_MID: '#D3B264',
     BRAND_DARK: '#CAA347',
-    BRAND_DARKER: '#B8860E',
 
     GREEN: '#009346',
     RED: '#CE2B37',
 
-    GRAY_100: '#F1F1F1',
+    GRAY_100: '#FAFAFA',
     GRAY_200: '#E1E1E6',
     GRAY_300: '#C4C4CC',
     GRAY_400: '#8D8D99',

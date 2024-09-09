@@ -4,7 +4,7 @@ import { Image } from 'expo-image'
 export const Container = styled.View`
   flex: 1;
 
-  background: ${({ theme }) => theme.COLORS.BRAND_MID};
+  background: ${({ theme }) => theme.COLORS.BRAND_LIGHT};
 `
 
 export const Wrapper = styled.View`
@@ -24,14 +24,14 @@ export const Logo = styled(Image)`
 `
 
 export const Title = styled.Text`
-  color: ${({ theme }) => theme.COLORS.WHITE};
+  color: ${({ theme }) => theme.COLORS.BACKGROUND};
   font-size: ${({ theme }) => theme.FONT_SIZE.XXXL}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
   text-align: center;
 `
 
 export const Slogan = styled.Text`
-  color: ${({ theme }) => theme.COLORS.WHITE};
+  color: ${({ theme }) => theme.COLORS.BACKGROUND};
   font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
   text-align: center;
@@ -46,5 +46,5 @@ export const ButtonWrapper = styled.View`
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 
-  background: ${({ theme }) => theme.COLORS.WHITE};
+  background: ${({ theme }) => theme.COLORS.BACKGROUND};
 `

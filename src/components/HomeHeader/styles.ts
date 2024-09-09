@@ -11,7 +11,7 @@ export const Wrapper = styled.View`
   padding-bottom: 28px;
   flex-direction: row;
   align-items: center;
-  background-color: ${({ theme }) => theme.COLORS.WHITE};
+  background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
 
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
@@ -29,7 +29,7 @@ export const Message = styled.Text`
 `
 
 export const Name = styled.Text`
-  color: ${({ theme }) => theme.COLORS.BRAND_NORMAL};
+  color: ${({ theme }) => theme.COLORS.BRAND_MID};
   font-size: ${({ theme }) => theme.FONT_SIZE.LG}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `

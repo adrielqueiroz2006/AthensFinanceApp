@@ -18,7 +18,7 @@ export const IconContainer = styled.View`
   border-radius: 20px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.COLORS.BRAND_NORMAL};
+  background-color: ${({ theme }) => theme.COLORS.BRAND_MID};
 `
 
 export const DetailsContainer = styled.View`
@@ -42,8 +42,6 @@ export const DetailDate = styled.Text`
 export const Price = styled.Text<Props>`
   font-size: ${({ theme }) => theme.FONT_SIZE.LG}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
-  color: ${({ theme }) => theme.COLORS.GREEN};
-
   color: ${({ theme, type }) =>
     type === 'GANHO' ? theme.COLORS.GREEN : theme.COLORS.RED};
 `

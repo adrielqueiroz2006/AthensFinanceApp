@@ -1,28 +1,33 @@
 import React from 'react'
 
 import { Container } from '../../components/Container'
-import { Header } from '../../components/Header'
 
-import { Button, TabWrapper, Title } from './styles'
+import { Button, Header, TabWrapper, Title } from './styles'
 
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
-import themes from '../../theme/light'
-
 import { Ganhos } from './ganhos'
 import { Gastos } from './gastos'
+
+import { useNavigation } from '@react-navigation/native'
+import { useTheme } from 'styled-components'
 
 const Tab = createMaterialTopTabNavigator()
 
 function TabTop() {
+  const themes = useTheme()
+
   return (
     <Tab.Navigator
       screenOptions={{
         lazy: true,
         tabBarActiveTintColor: themes.COLORS.BRAND_DARK,
-        tabBarLabelStyle: { color: themes.COLORS.GRAY_900 },
+        tabBarLabelStyle: {
+          fontSize: themes.FONT_SIZE.XS,
+          color: themes.COLORS.GRAY_900,
+        },
 
         tabBarStyle: {
           backgroundColor: themes.COLORS.GRAY_100,
@@ -49,12 +54,15 @@ function TabTop() {
 }
 
 export function Transactions() {
+  const navigation = useNavigation()
+  const themes = useTheme()
+
   return (
     <Container>
       <Header>
         <Title>Transações</Title>
-        <Button>
-          <Icon name="plus" color={themes.COLORS.WHITE} size={15} />
+        <Button onPress={() => navigation.navigate('createTransaction')}>
+          <Icon name="plus" color={themes.COLORS.BACKGROUND} size={15} />
         </Button>
       </Header>
 

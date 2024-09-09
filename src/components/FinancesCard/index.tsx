@@ -5,14 +5,20 @@ import { useTheme } from 'styled-components/native'
 
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-export function FinancesCard() {
+type financeCardProps = {
+  income: number
+  expense: number
+}
+
+export function FinancesCard({ income, expense }: financeCardProps) {
   const themes = useTheme()
+  const total = Number(income) - Number(expense)
 
   return (
     <Container>
       <Wrapper>
         <Title>Saldo Total</Title>
-        <Value>R$ 1235,00</Value>
+        <Value>R$ {total}</Value>
       </Wrapper>
       <IconWrapper>
         <Icon

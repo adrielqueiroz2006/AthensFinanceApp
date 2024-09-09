@@ -16,16 +16,10 @@ type Props = {
   value: string
   details: string
   icon: string
-  type?: PriceStyleProps
+  type: PriceStyleProps
 }
 
-export function TransactionsCard({
-  date,
-  value,
-  details,
-  icon = 'shopping-cart',
-  type = 'GANHO',
-}: Props) {
+export function TransactionsCard({ date, value, details, icon, type }: Props) {
   return (
     <Container>
       <IconContainer>

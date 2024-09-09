@@ -1,69 +1,54 @@
-import React from 'react'
-import { Container, Title } from './styles'
-import { TransactionsCard } from '../TransactionsCard'
-import { PriceStyleProps } from '../TransactionsCard/styles'
+import React, { useCallback, useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 
-type Props = {
-  date: string
-  value: string
-  details: string
-  icon: string
-  type: PriceStyleProps
-}
+import { Container, Title } from './styles'
+
+import { TransactionsCard } from '../TransactionsCard'
+
+import { ExchangeProps } from '../../screens/Home'
+
+import { exchangeGetAll } from '../../storage/exchanges/exchangeGetAll'
 
 export function Transactions() {
-  const transactions: Props[] = [
-    {
-      date: '30/05/24',
-      value: '1122,75',
-      details: 'Compra',
-      type: 'GASTO',
-      icon: 'shopping-cart',
-    },
-    {
-      date: '22/05/24',
-      value: '260,00',
-      details: 'Venda',
-      type: 'GANHO',
-      icon: 'dollar-sign',
-    },
-    {
-      date: '20/05/24',
-      value: '35,50',
-      details: 'Compra',
-      type: 'GASTO',
-      icon: 'shopping-cart',
-    },
-    {
-      date: '15/05/24',
-      value: '566,75',
-      details: 'Compra',
-      type: 'GASTO',
-      icon: 'shopping-cart',
-    },
-    {
-      date: '10/05/24',
-      value: '2700,00',
-      details: 'Salário',
-      type: 'GANHO',
-      icon: 'money-bill',
-    },
-  ]
+  const [exchanges, setExchanges] = useState<ExchangeProps[]>([])
+
+  async function fetchExchanges() {
+    try {
+      const data = await exchangeGetAll()
+      setExchanges(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchExchanges()
+    }, [])
+  )
 
   return (
     <Container>
-      <Title>Transações</Title>
+      {exchanges.length > 0 ? (
+        <>
+          <Title>Transações</Title>
 
-      {transactions.map((transaction) => (
-        <TransactionsCard
-          key={transaction.value}
-          date={transaction.date}
-          value={transaction.value}
-          details={transaction.details}
-          icon={transaction.icon}
-          type={transaction.type}
-        />
-      ))}
+          {exchanges.slice(0, 5).map((item) => (
+            <TransactionsCard
+              key={item.id}
+              date={item.date}
+              value={item.price}
+              details={item.category}
+              icon={
+                item.category === 'Compras' ? 'shopping-cart' : 'dollar-sign'
+              }
+              type={item.type}
+            />
+          ))}
+        </>
+      ) : (
+        <></>
+      )}
     </Container>
   )
 }

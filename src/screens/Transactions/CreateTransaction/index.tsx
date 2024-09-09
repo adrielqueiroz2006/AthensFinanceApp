@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
-import { Platform, Switch, useColorScheme } from 'react-native'
+import { Platform, Switch, Text, useColorScheme } from 'react-native'
 
 import {
   DateButton,
   DateText,
   Input,
   InputContainer,
+  InputMenu,
   InputRow,
   InputTitle,
+  Title,
   TransactionType,
   ValueInput,
+  Wrapper,
 } from './styles'
 
 import { useTheme } from 'styled-components/native'
@@ -18,15 +21,37 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker'
 import { Container } from '../../../components/Container'
-import { Wrapper } from '../../../components/Wrapper'
+import { Header } from '../../../components/Header'
+import { Button } from '../../../components/Button'
+
+import uuid from 'react-native-uuid'
+import { exchangeCreate } from '../../../storage/exchanges/exchangeCreate'
+
+import { useNavigation } from '@react-navigation/native'
+
+import { Picker } from '@react-native-picker/picker'
+import { categories } from '../../../utils/category'
+
+type TypeStyleProps = 'GANHO' | 'GASTO'
+
+export type ExchangeProps = {
+  id: string
+  category: string
+  type: TypeStyleProps
+  date: string
+  price: string
+}
 
 export function CreateTransaction() {
+  const [category, setCategory] = useState('Compras')
   const [ganho, setGanho] = useState(false)
   const [showDate, setShowDate] = useState(false)
   const [date, setDate] = useState(new Date())
-  const [value, setValue] = useState('')
+  const [price, setPrice] = useState('')
 
   const themes = useTheme()
+
+  const navigation = useNavigation()
 
   const toggleSwitch = () => setGanho((previousState) => !previousState)
 
@@ -36,76 +61,151 @@ export function CreateTransaction() {
     setDate(currentDate)
   }
 
+  async function handleAddExchange({
+    id,
+    category,
+    type,
+    date,
+    price,
+  }: ExchangeProps) {
+    const newExchange = {
+      id,
+      category,
+      type,
+      date,
+      price,
+    }
+
+    try {
+      await exchangeCreate(newExchange)
+    } catch (error) {
+      console.log(error)
+    }
+
+    setCategory('Compras')
+    setDate(new Date())
+    setPrice('')
+
+    navigation.goBack()
+  }
+
   return (
     <Container>
+      <Header title="Nova Transação" />
+
       <Wrapper>
-        <InputContainer>
-          <InputTitle>Tipo de Transação</InputTitle>
-          <InputRow>
-            <TransactionType
-              style={
-                !ganho
-                  ? { color: themes.COLORS.GRAY_900 }
-                  : { color: themes.COLORS.GRAY_900 }
-              }
-            >
-              Ganho
-            </TransactionType>
-            <Switch
-              trackColor={{
-                false: themes.COLORS.WHITE,
-                true: themes.COLORS.WHITE,
+        <InputMenu>
+          <InputContainer>
+            <InputTitle>Categoria</InputTitle>
+            <Picker
+              selectedValue={category}
+              onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}
+              style={{
+                padding: 10,
+                marginTop: 10,
+                borderRadius: 8,
+                backgroundColor: themes.COLORS.GRAY_100,
+                color: themes.COLORS.GRAY_900,
               }}
-              thumbColor={
-                ganho ? themes.COLORS.BRAND_DARK : themes.COLORS.BRAND_DARK
-              }
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={ganho}
-            />
-            <TransactionType
-              style={
-                ganho
-                  ? { color: themes.COLORS.BRAND_DARK }
-                  : { color: themes.COLORS.GRAY_900 }
-              }
+              dropdownIconColor={themes.COLORS.GRAY_900}
+              itemStyle={{
+                color: themes.COLORS.GRAY_900,
+              }}
             >
-              Gasto
-            </TransactionType>
-          </InputRow>
-        </InputContainer>
+              {categories.map((category, index) => (
+                <Picker.Item
+                  key={index}
+                  label={category.name}
+                  value={category.name}
+                />
+              ))}
+            </Picker>
+          </InputContainer>
 
-        <InputContainer>
-          <InputTitle>Data</InputTitle>
-          <Input>
-            <DateButton onPress={() => setShowDate(true)}>
-              <DateText>{date.toDateString()}</DateText>
-            </DateButton>
-          </Input>
-        </InputContainer>
+          <InputContainer>
+            <InputTitle>Tipo de Transação</InputTitle>
+            <InputRow>
+              <TransactionType
+                style={
+                  !ganho
+                    ? { color: themes.COLORS.BRAND_DARK }
+                    : { color: themes.COLORS.GRAY_900 }
+                }
+              >
+                Ganho
+              </TransactionType>
+              <Switch
+                thumbColor={themes.COLORS.BRAND_DARK}
+                trackColor={{
+                  false: themes.COLORS.GRAY_200,
+                  true: themes.COLORS.GRAY_200,
+                }}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={ganho}
+              />
+              <TransactionType
+                style={
+                  ganho
+                    ? { color: themes.COLORS.BRAND_DARK }
+                    : { color: themes.COLORS.GRAY_900 }
+                }
+              >
+                Gasto
+              </TransactionType>
+            </InputRow>
+          </InputContainer>
 
-        {showDate && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode="date"
-            display="calendar"
-            onChange={onChangeDate}
-          />
-        )}
+          <InputContainer>
+            <InputTitle>Data</InputTitle>
+            <Input>
+              <DateButton onPress={() => setShowDate(true)}>
+                <DateText>{date.toDateString()}</DateText>
+              </DateButton>
+            </Input>
+          </InputContainer>
 
-        <InputContainer>
-          <InputTitle>Valor</InputTitle>
-          <Input>
-            <ValueInput
-              value={value}
-              placeholder="Ex: 20"
-              keyboardType="numeric"
-              onChangeText={(text) => setValue(text)}
-              placeholderTextColor={themes.COLORS.GRAY_700}
+          {showDate && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode="date"
+              display="calendar"
+              onChange={onChangeDate}
             />
-          </Input>
-        </InputContainer>
+          )}
+
+          <InputContainer>
+            <InputTitle>Valor</InputTitle>
+            <Input>
+              <ValueInput
+                value={price}
+                placeholder="Ex: 20"
+                keyboardType="numeric"
+                onChangeText={(text) => setPrice(text)}
+                placeholderTextColor={themes.COLORS.GRAY_900}
+              />
+            </Input>
+          </InputContainer>
+        </InputMenu>
+
+        <Button
+          title="Salvar"
+          onPress={() => {
+            const day = String(date.getDate()).padStart(2, '0')
+            const month = String(date.getMonth() + 1).padStart(2, '0')
+            const year = String(date.getFullYear()).slice(-2)
+            const fixedDate = `${day}/${month}/${year}`
+
+            handleAddExchange({
+              id: uuid.v4().toString(),
+              category,
+              type: !ganho ? 'GANHO' : 'GASTO',
+              date: fixedDate,
+              price,
+            })
+          }}
+        />
       </Wrapper>
     </Container>
   )

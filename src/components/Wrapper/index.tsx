@@ -1,5 +1,11 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, useColorScheme, View, ViewStyle } from 'react-native'
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  useColorScheme,
+  View,
+  ViewStyle,
+} from 'react-native'
 import { useTheme } from 'styled-components/native'
 
 type Props = {
@@ -17,5 +23,9 @@ export function Wrapper({ children }: Props) {
     } as ViewStyle,
   })
 
-  return <View style={styles.wrapper}>{children}</View>
+  return (
+    <KeyboardAvoidingView style={styles.wrapper}>
+      {children}
+    </KeyboardAvoidingView>
+  )
 }
