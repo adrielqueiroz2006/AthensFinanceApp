@@ -136,7 +136,7 @@ export function Home() {
 
           <Transactions />
 
-          <Statistics />
+          <Statistics income={totalIncomes} expense={totalExpenses} />
         </ScrollView>
       </Wrapper>
 
