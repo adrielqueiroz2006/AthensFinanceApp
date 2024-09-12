@@ -20,6 +20,7 @@ import { SignIn } from './src/screens/SignIn'
 import { Loading } from './src/components/Loading'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_700Bold })
@@ -40,14 +41,16 @@ export default function App() {
   }
 
   return (
-    <AppProvider id={REALM_APP_ID}>
-      <ThemeProvider>
-        <UserProvider fallback={SignIn}>
-          <RealmProvider>
-            <Routes />
-          </RealmProvider>
-        </UserProvider>
-      </ThemeProvider>
-    </AppProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppProvider id={REALM_APP_ID}>
+        <ThemeProvider>
+          <UserProvider fallback={SignIn}>
+            <RealmProvider>
+              <Routes />
+            </RealmProvider>
+          </UserProvider>
+        </ThemeProvider>
+      </AppProvider>
+    </GestureHandlerRootView>
   )
 }

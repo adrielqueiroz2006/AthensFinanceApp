@@ -10,6 +10,7 @@ export const Container = styled.View`
   margin-top: 10px;
   flex-direction: row;
   align-items: center;
+  background-color: ${({ theme }) => theme.COLORS.GRAY_100};
 `
 
 export const IconContainer = styled.View`

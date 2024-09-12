@@ -1,11 +1,5 @@
 import React, { ReactNode } from 'react'
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  useColorScheme,
-  View,
-  ViewStyle,
-} from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, ViewStyle } from 'react-native'
 import { useTheme } from 'styled-components/native'
 
 type Props = {

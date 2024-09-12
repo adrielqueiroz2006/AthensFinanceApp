@@ -8,6 +8,11 @@ import { TransactionsCard } from '../TransactionsCard'
 import { ExchangeProps } from '../../screens/Home'
 
 import { exchangeGetAll } from '../../storage/exchanges/exchangeGetAll'
+import { exchangeDelete } from '../../storage/exchanges/exchangeDelete'
+
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
+
+import { CardActions } from '../../utils/CardActions'
 
 export function Transactions() {
   const [exchanges, setExchanges] = useState<ExchangeProps[]>([])
@@ -21,6 +26,16 @@ export function Transactions() {
     }
   }
 
+  async function handleDeleteExchange(echangeId: string) {
+    try {
+      await exchangeDelete(echangeId)
+    } catch (error) {
+      console.log(error)
+    }
+
+    fetchExchanges()
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchExchanges()
@@ -29,26 +44,28 @@ export function Transactions() {
 
   return (
     <Container>
-      {exchanges.length > 0 ? (
-        <>
-          <Title>Transações</Title>
+      <Title>Transações</Title>
 
-          {exchanges.slice(0, 5).map((item) => (
-            <TransactionsCard
-              key={item.id}
-              date={item.date}
-              value={item.price}
-              details={item.category}
-              icon={
-                item.category === 'Compras' ? 'shopping-cart' : 'dollar-sign'
-              }
-              type={item.type}
+      {exchanges.slice(0, 5).map((item) => (
+        <Swipeable
+          key={item.id}
+          renderRightActions={() => (
+            <CardActions
+              onDeleteExchange={() => handleDeleteExchange(item.id)}
             />
-          ))}
-        </>
-      ) : (
-        <></>
-      )}
+          )}
+          overshootRight={false}
+        >
+          <TransactionsCard
+            key={item.id}
+            date={item.date}
+            value={item.price.toString().replace('.', ',')}
+            details={item.category.name}
+            icon={item.category.icon}
+            type={item.type}
+          />
+        </Swipeable>
+      ))}
     </Container>
   )
 }

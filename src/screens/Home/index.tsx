@@ -16,14 +16,21 @@ import { UserDetails } from '../../libs/realm/schemas/UserDetails'
 import { useTheme } from 'styled-components'
 import { exchangeGetAll } from '../../storage/exchanges/exchangeGetAll'
 import { useFocusEffect } from '@react-navigation/native'
+import { EmptyTransactions } from '../../components/EmptyTransactions'
 
 // import { PriceStyleProps } from '../../components/TransactionsCard/styles'
 
 type TypeStyleProps = 'GANHO' | 'GASTO'
 
+type Category = {
+  id: number
+  name: 'Compras'
+  icon: 'shopping-cart'
+}
+
 export type ExchangeProps = {
   id: string
-  category: string
+  category: Category
   type: TypeStyleProps
   date: string
   price: string
@@ -108,13 +115,13 @@ export function Home() {
 
   const incomes = exchanges.filter((item) => item.type === 'GANHO')
   const totalIncomes = incomes.reduce(
-    (total, item) => total + parseFloat(item.price),
+    (total, item) => total + Number(item.price),
     0
   )
 
   const expenses = exchanges.filter((item) => item.type === 'GASTO')
   const totalExpenses = expenses.reduce(
-    (total, item) => total + parseFloat(item.price),
+    (total, item) => total + Number(item.price),
     0
   )
 
@@ -134,9 +141,15 @@ export function Home() {
         <ScrollView>
           <FinancesCard income={totalIncomes} expense={totalExpenses} />
 
-          <Transactions />
+          {exchanges.length > 0 ? (
+            <>
+              <Transactions />
 
-          <Statistics income={totalIncomes} expense={totalExpenses} />
+              <Statistics income={totalIncomes} expense={totalExpenses} />
+            </>
+          ) : (
+            <EmptyTransactions />
+          )}
         </ScrollView>
       </Wrapper>
 

@@ -14,6 +14,7 @@
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/datetimepicker": "7.7.0",
     "@react-native-google-signin/google-signin": "^11.0.1",
+    "@react-native-picker/picker": "2.6.1",
     "@react-navigation/material-bottom-tabs": "^6.2.29",
     "@react-navigation/material-top-tabs": "^6.6.13",
     "@react-navigation/native": "^6.1.17",
@@ -28,6 +29,7 @@
     "react": "18.2.0",
     "react-native": "0.73.6",
     "react-native-circular-progress-indicator": "^4.4.2",
+    "react-native-gesture-handler": "~2.19.0",
     "react-native-get-random-values": "^1.11.0",
     "react-native-pager-view": "6.2.3",
     "react-native-paper": "^5.12.5",
@@ -39,8 +41,7 @@
     "react-native-uuid": "^2.0.2",
     "react-native-vector-icons": "^10.1.0",
     "realm": "^12.6.2",
-    "styled-components": "^6.1.8",
-    "@react-native-picker/picker": "2.6.1"
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -12,7 +12,7 @@ type financeCardProps = {
 
 export function FinancesCard({ income, expense }: financeCardProps) {
   const themes = useTheme()
-  const total = Number(income) - Number(expense)
+  const total = (income - expense).toFixed(2).replace('.', ',')
 
   return (
     <Container>

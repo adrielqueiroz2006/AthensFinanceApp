@@ -7,8 +7,13 @@ import { EmptyExchanges } from '../../components/EmptyExchanges'
 
 import { ExchangeProps } from './CreateTransaction'
 import { exchangeGetAll } from '../../storage/exchanges/exchangeGetAll'
+import { exchangeDelete } from '../../storage/exchanges/exchangeDelete'
 
 import { useFocusEffect } from '@react-navigation/native'
+
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
+
+import { CardActions } from '../../utils/CardActions'
 
 export function Gastos() {
   const [exchanges, setExchanges] = useState<ExchangeProps[]>([])
@@ -16,10 +21,20 @@ export function Gastos() {
   async function fetchExchanges() {
     try {
       const data = await exchangeGetAll()
-      setExchanges(data)
+      setExchanges(data.filter((item) => item.type === 'GASTO'))
     } catch (error) {
       console.log(error)
     }
+  }
+
+  async function handleDeleteExchange(echangeId: string) {
+    try {
+      await exchangeDelete(echangeId)
+    } catch (error) {
+      console.log(error)
+    }
+
+    fetchExchanges()
   }
 
   useFocusEffect(
@@ -32,18 +47,28 @@ export function Gastos() {
     <Wrapper>
       {exchanges.length > 0 ? (
         <FlatList
-          data={exchanges.filter((item) => item.type === 'GASTO')}
-          renderItem={({ item }) => (
-            <TransactionsCard
-              key={item.id}
-              date={item.date}
-              value={item.price}
-              details={item.category}
-              icon={'shopping-cart'}
-              type={item.type}
-            />
-          )}
           keyExtractor={(item) => item.id}
+          data={exchanges}
+          renderItem={({ item }) => (
+            <Swipeable
+              key={item.id}
+              renderRightActions={() => (
+                <CardActions
+                  onDeleteExchange={() => handleDeleteExchange(item.id)}
+                />
+              )}
+              overshootRight={false}
+            >
+              <TransactionsCard
+                key={item.id}
+                date={item.date}
+                value={item.price.toString().replace('.', ',')}
+                details={item.category.name}
+                icon={item.category.icon}
+                type={item.type}
+              />
+            </Swipeable>
+          )}
         />
       ) : (
         <EmptyExchanges type="gasto" />

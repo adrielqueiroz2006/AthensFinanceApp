@@ -1,6 +1,10 @@
+import { KeyboardAvoidingView, Platform } from 'react-native'
 import styled from 'styled-components/native'
 
-export const Wrapper = styled.KeyboardAvoidingView`
+export const Wrapper = styled(KeyboardAvoidingView).attrs({
+  behavior: Platform.OS === 'ios' ? 'padding' : 'height',
+  keyboardVerticalOffset: 80,
+})`
   flex: 1;
   padding: 22px;
 `
