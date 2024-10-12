@@ -8,8 +8,9 @@ const darkTheme: DefaultTheme = {
     BRAND_MID: '#D3B264',
     BRAND_DARK: '#CAA347',
 
-    GREEN: '#009346',
     RED: '#CE2B37',
+    GREEN: '#009346',
+    BLUE: '#009ee5',
 
     GRAY_100: '#000000',
     GRAY_200: '#29292E',

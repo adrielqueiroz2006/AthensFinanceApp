@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Container } from '../../components/Container'
 
@@ -14,9 +14,15 @@ import { Gastos } from './gastos'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'styled-components'
 
+type TypeStyleProps = 'GANHO' | 'GASTO'
+
 const Tab = createMaterialTopTabNavigator()
 
-function TabTop() {
+function TabTop({
+  setCurrentTab,
+}: {
+  setCurrentTab: (tab: TypeStyleProps) => void
+}) {
   const themes = useTheme()
 
   return (
@@ -38,6 +44,13 @@ function TabTop() {
         swipeEnabled: false,
         animationEnabled: true,
       }}
+      screenListeners={{
+        state: (e) => {
+          const index = e.data.state.index
+          const currentTab = index === 0 ? 'GANHO' : 'GASTO'
+          setCurrentTab(currentTab)
+        },
+      }}
     >
       <Tab.Screen
         name="Ganhos"
@@ -56,18 +69,23 @@ function TabTop() {
 export function Transactions() {
   const navigation = useNavigation()
   const themes = useTheme()
+  const [currentTab, setCurrentTab] = useState<TypeStyleProps>('GANHO')
 
   return (
     <Container>
       <Header>
         <Title>Transações</Title>
-        <Button onPress={() => navigation.navigate('createTransaction')}>
+        <Button
+          onPress={() =>
+            navigation.navigate('createTransaction', { currentTab })
+          }
+        >
           <Icon name="plus" color={themes.COLORS.BACKGROUND} size={15} />
         </Button>
       </Header>
 
       <TabWrapper>
-        <TabTop />
+        <TabTop setCurrentTab={setCurrentTab} />
       </TabWrapper>
     </Container>
   )

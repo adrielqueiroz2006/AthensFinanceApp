@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
@@ -5,9 +7,13 @@ import Icon from 'react-native-vector-icons/Feather'
 
 import { useTheme } from 'styled-components/native'
 
+import { SignIn } from '../screens/SignIn'
 import { Home } from '../screens/Home'
 import { Transactions } from '../screens/Transactions'
 import { CreateTransaction } from '../screens/Transactions/CreateTransaction'
+import { EditTransaction } from '../screens/Transactions/EditTransaction'
+
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
@@ -51,11 +57,34 @@ function MyTabs() {
 }
 
 export function AppRoutes() {
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null)
+  const [initializing, setInitializing] = useState(true)
+
+  const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
+    setUser(user)
+    if (initializing) setInitializing(false)
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged)
+    return subscriber
+  }, [])
+
+  if (initializing) return null
+
   return (
     <Navigator screenOptions={{ headerShown: false }}>
-      <Screen name="tabs" component={MyTabs} />
+      {!user ? (
+        <Screen name="signIn" component={SignIn} />
+      ) : (
+        <>
+          <Screen name="tabs" component={MyTabs} />
 
-      <Screen name="createTransaction" component={CreateTransaction} />
+          <Screen name="createTransaction" component={CreateTransaction} />
+
+          <Screen name="editTransaction" component={EditTransaction} />
+        </>
+      )}
     </Navigator>
   )
 }

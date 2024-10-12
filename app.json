@@ -22,13 +22,19 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#fff"
       },
-      "package": "com.athens.athensfinance"
+      "package": "com.athens.athensfinance",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "expo-build-properties",
+      "@react-native-firebase/app",
+      [
+        "expo-build-properties"
+      ]
     ],
     "extra": {
       "eas": {

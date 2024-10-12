@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "924277056431",
+    "project_id": "testefirebase-3a39c",
+    "storage_bucket": "testefirebase-3a39c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924277056431:android:772dff14f53a4c9edbc55a",
+        "android_client_info": {
+          "package_name": "com.athens.athensfinance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924277056431-2907n0ttc8319m6h9me7n5udbrljlula.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.athens.athensfinance",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2ORd0-rqJFl1VnuEN4IpE99dVVnAjhd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924277056431-tpi2j8egkr7do2fl92obcgdgmmcr9h64.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924277056431:android:9ee678ecb3881e26dbc55a",
+        "android_client_info": {
+          "package_name": "com.athens.athensfinanceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2ORd0-rqJFl1VnuEN4IpE99dVVnAjhd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924277056431-tpi2j8egkr7do2fl92obcgdgmmcr9h64.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,13 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { FlatList } from 'react-native'
+
+import { useExchanges } from '../../contexts/ExchangeContext'
 
 import { Wrapper } from '../../components/Wrapper'
 import { TransactionsCard } from '../../components/TransactionsCard'
 import { EmptyExchanges } from '../../components/EmptyExchanges'
-
-import { ExchangeProps } from './CreateTransaction'
-import { exchangeGetAll } from '../../storage/exchanges/exchangeGetAll'
-import { exchangeDelete } from '../../storage/exchanges/exchangeDelete'
 
 import { useFocusEffect } from '@react-navigation/native'
 
@@ -16,47 +14,38 @@ import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { CardActions } from '../../utils/CardActions'
 
 export function Ganhos() {
-  const [exchanges, setExchanges] = useState<ExchangeProps[]>([])
+  const { exchanges, loadExchanges } = useExchanges()
+  const cardActionsSwipeable = useRef<any>(null)
 
   async function fetchExchanges() {
     try {
-      const data = await exchangeGetAll()
-      setExchanges(data.filter((item) => item.type === 'GANHO'))
+      loadExchanges()
     } catch (error) {
       console.log(error)
     }
-  }
-
-  async function handleDeleteExchange(echangeId: string) {
-    try {
-      await exchangeDelete(echangeId)
-    } catch (error) {
-      console.log(error)
-    }
-
-    fetchExchanges()
   }
 
   useFocusEffect(
     useCallback(() => {
       fetchExchanges()
+
+      if (cardActionsSwipeable.current) {
+        cardActionsSwipeable.current.close()
+      }
     }, [])
   )
 
   return (
     <Wrapper>
-      {exchanges.length > 0 ? (
+      {exchanges.filter((item) => item.type === 'GANHO').length > 0 ? (
         <FlatList
           keyExtractor={(item) => item.id}
           data={exchanges}
           renderItem={({ item }) => (
             <Swipeable
+              ref={cardActionsSwipeable}
               key={item.id}
-              renderRightActions={() => (
-                <CardActions
-                  onDeleteExchange={() => handleDeleteExchange(item.id)}
-                />
-              )}
+              renderRightActions={() => <CardActions exchange={item} />}
               overshootRight={false}
             >
               <TransactionsCard
@@ -73,21 +62,6 @@ export function Ganhos() {
       ) : (
         <EmptyExchanges type="ganho" />
       )}
-
-      {/* <FlatList
-        data={transactionsData.filter((item) => item.type === 'GANHO')}
-        renderItem={({ item }) => (
-          <TransactionsCard
-            key={item.value}
-            date={item.date}
-            value={item.value}
-            details={item.details}
-            icon={item.icon}
-            type={item.type}
-          />
-        )}
-        keyExtractor={(item) => item.value}
-      /> */}
     </Wrapper>
   )
 }

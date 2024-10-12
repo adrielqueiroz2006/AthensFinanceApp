@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Alert, Platform, ScrollView, Switch } from 'react-native'
 
 import { useExchanges } from '../../../contexts/ExchangeContext'
@@ -49,25 +49,20 @@ type ExchangeProps = {
 }
 
 type RootParamList = {
-  createTransaction: { currentTab: TypeStyleProps }
+  editTransaction: { exchange: ExchangeProps }
 }
 
-export function CreateTransaction() {
-  const { addExchange } = useExchanges()
+export function EditTransaction() {
+  const { editExchange } = useExchanges()
 
-  const route = useRoute<RouteProp<RootParamList, 'createTransaction'>>()
-  const { currentTab } = route.params
+  const route = useRoute<RouteProp<RootParamList, 'editTransaction'>>()
+  const { exchange } = route.params
 
-  const [category, setCategory] = useState({
-    id: 1,
-    name: 'Compras',
-    icon: 'shopping-cart',
-  })
-  const [ganho, setGanho] = useState(currentTab === 'GASTO' ? true : false)
+  const [ganho, setGanho] = useState(exchange.type === 'GASTO' ? true : false)
   const [showDate, setShowDate] = useState(false)
-  const [date, setDate] = useState(new Date())
-  const [fixedDate, setFixedDate] = useState('')
-  const [price, setPrice] = useState('')
+  const [date, setDate] = useState(exchange.date)
+  const [price, setPrice] = useState(exchange.price)
+  const [category, setCategory] = useState(exchange.category)
 
   const themes = useTheme()
 
@@ -75,27 +70,18 @@ export function CreateTransaction() {
 
   const toggleSwitch = () => setGanho((previousState) => !previousState)
 
-  function onChangeFixedDate() {
-    const day = String(date.getDate()).padStart(2, '0')
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const year = String(date.getFullYear()).slice(-2)
-    const fixedDateString = `${day}/${month}/${year}`
-
-    setFixedDate(fixedDateString)
-  }
-
-  useEffect(() => {
-    onChangeFixedDate()
-  })
-
   const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || date
+    const currentDate = selectedDate || new Date()
     setShowDate(Platform.OS === 'ios')
-    setDate(currentDate)
-    onChangeFixedDate()
+
+    const day = String(currentDate.getDate()).padStart(2, '0')
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+    const year = String(currentDate.getFullYear()).slice(-2)
+    const fixedDate = `${day}/${month}/${year}`
+    setDate(fixedDate)
   }
 
-  async function handleAddExchange({
+  async function handleEditExchange({
     id,
     category,
     type,
@@ -108,13 +94,6 @@ export function CreateTransaction() {
         'Informe um valor para essa transação!'
       )
 
-    if (isNaN(Number(price))) {
-      return Alert.alert(
-        'Valor inválido',
-        'Informe um valor para essa transação!'
-      )
-    }
-
     const newExchange = {
       id,
       category,
@@ -124,18 +103,10 @@ export function CreateTransaction() {
     }
 
     try {
-      await addExchange(newExchange)
+      await editExchange(newExchange)
     } catch (error) {
       console.log(error)
     }
-
-    setCategory({
-      id: 1,
-      name: 'Compras',
-      icon: 'shopping-cart',
-    })
-    setDate(new Date())
-    setPrice('')
 
     navigation.goBack()
   }
@@ -217,7 +188,7 @@ export function CreateTransaction() {
               <InputTitle>Data</InputTitle>
               <Input>
                 <DateButton onPress={() => setShowDate(true)}>
-                  <DateText>{fixedDate}</DateText>
+                  <DateText>{date}</DateText>
                 </DateButton>
               </Input>
             </InputContainer>
@@ -225,7 +196,7 @@ export function CreateTransaction() {
             {showDate && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={date}
+                value={new Date()}
                 mode="date"
                 display="calendar"
                 onChange={onChangeDate}
@@ -250,12 +221,12 @@ export function CreateTransaction() {
             title="Salvar"
             isWhite={'BLACK'}
             onPress={() => {
-              handleAddExchange({
-                id: uuid.v4().toString(),
+              handleEditExchange({
+                id: exchange.id,
                 category,
                 type: !ganho ? 'GANHO' : 'GASTO',
-                date: fixedDate,
-                price: Number(price.replace(',', '.')).toFixed(2),
+                date: date,
+                price: Number(price).toFixed(2),
               })
             }}
           />

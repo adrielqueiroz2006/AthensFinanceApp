@@ -8,8 +8,9 @@ const lightTheme: DefaultTheme = {
     BRAND_MID: '#D3B264',
     BRAND_DARK: '#CAA347',
 
-    GREEN: '#009346',
     RED: '#CE2B37',
+    GREEN: '#009346',
+    BLUE: '#009ee5',
 
     GRAY_100: '#FAFAFA',
     GRAY_200: '#E1E1E6',
