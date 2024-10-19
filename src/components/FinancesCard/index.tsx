@@ -12,13 +12,17 @@ type financeCardProps = {
 
 export function FinancesCard({ income, expense }: financeCardProps) {
   const themes = useTheme()
-  const total = (income - expense).toFixed(2).replace('.', ',')
+  const total = income - expense
 
   return (
     <Container>
       <Wrapper>
         <Title>Saldo Total</Title>
-        <Value>R$ {total}</Value>
+        <Value>
+          {Number(total) >= 0
+            ? `R$ ${total.toFixed(2).replace('.', ',')}`
+            : `-R$ ${Number(-total).toFixed(2).replace('.', ',')}`}
+        </Value>
       </Wrapper>
       <IconWrapper>
         <Icon

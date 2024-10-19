@@ -20,10 +20,7 @@ type financeCardProps = {
 export function Statistics({ income, expense }: financeCardProps) {
   const themes = useTheme()
 
-  const paid = Number(income)
-  const saved = Number(income) - Number(expense)
-
-  const totalSaved = Number((saved * 100) / paid).toFixed(1)
+  const totalSaved = Number((expense * 100) / income).toFixed(1)
 
   return (
     <Container>
@@ -33,7 +30,13 @@ export function Statistics({ income, expense }: financeCardProps) {
         <CircularProgressContainer>
           <CircularProgress
             radius={70}
-            value={Number(totalSaved)}
+            value={
+              income > expense
+                ? Number(totalSaved) > 0
+                  ? Number(totalSaved)
+                  : 0
+                : 0
+            }
             duration={1000}
             activeStrokeWidth={20}
             inActiveStrokeWidth={20}
@@ -47,18 +50,15 @@ export function Statistics({ income, expense }: financeCardProps) {
           <RowContainer>
             <Icon name="circle" size={15} color={themes.COLORS.BRAND_MID} />
             <Info style={{ color: themes.COLORS.GRAY_900 }}>
-              Pago{' '}
-              {Number(totalSaved) > 0
-                ? (100 - Number(totalSaved)).toFixed(1)
-                : 0}
-              %
+              Pago {income > expense ? totalSaved : 0}%
             </Info>
           </RowContainer>
 
           <RowContainer>
             <Icon name="circle" size={15} color={themes.COLORS.GRAY_900} />
             <Info style={{ color: themes.COLORS.GRAY_900 }}>
-              Salvo {Number(totalSaved) > 0 ? totalSaved : 0}%
+              Salvo{' '}
+              {income > expense ? (100 - Number(totalSaved)).toFixed(1) : 0}%
             </Info>
           </RowContainer>
         </NumbersContainer>

@@ -113,7 +113,7 @@ export function EditTransaction() {
 
   return (
     <Container>
-      <Header title="Nova Transação" />
+      <Header title="Editar Transação" />
       <Wrapper>
         <ScrollView
           contentContainerStyle={{

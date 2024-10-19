@@ -40,7 +40,7 @@ export function Ganhos() {
       {exchanges.filter((item) => item.type === 'GANHO').length > 0 ? (
         <FlatList
           keyExtractor={(item) => item.id}
-          data={exchanges}
+          data={exchanges.filter((item) => item.type === 'GANHO')}
           renderItem={({ item }) => (
             <Swipeable
               ref={cardActionsSwipeable}
