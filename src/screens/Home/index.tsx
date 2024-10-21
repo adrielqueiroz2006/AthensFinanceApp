@@ -1,4 +1,4 @@
-import { ScrollView, StatusBar } from 'react-native'
+import { ScrollView, StatusBar, View } from 'react-native'
 import { useCallback } from 'react'
 
 import { useExchanges } from '../../contexts/ExchangeContext'
@@ -59,21 +59,23 @@ export function Home() {
         translucent
       />
       <HomeHeader />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Wrapper>
-          <FinancesCard income={totalIncomes} expense={totalExpenses} />
+      <View style={{ flex: 1, backgroundColor: themes.COLORS.GRAY_100 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Wrapper>
+            <FinancesCard income={totalIncomes} expense={totalExpenses} />
 
-          {exchanges.length > 0 ? (
-            <>
-              <Transactions />
+            {exchanges.length > 0 ? (
+              <>
+                <Transactions />
 
-              <Statistics income={totalIncomes} expense={totalExpenses} />
-            </>
-          ) : (
-            <EmptyTransactions />
-          )}
-        </Wrapper>
-      </ScrollView>
+                <Statistics income={totalIncomes} expense={totalExpenses} />
+              </>
+            ) : (
+              <EmptyTransactions />
+            )}
+          </Wrapper>
+        </ScrollView>
+      </View>
     </Container>
   )
 }

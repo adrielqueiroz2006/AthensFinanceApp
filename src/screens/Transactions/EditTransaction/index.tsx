@@ -165,8 +165,8 @@ export function EditTransaction() {
                 <Switch
                   thumbColor={themes.COLORS.BRAND_DARK}
                   trackColor={{
-                    false: themes.COLORS.GRAY_200,
-                    true: themes.COLORS.GRAY_200,
+                    false: themes.COLORS.GRAY_300,
+                    true: themes.COLORS.GRAY_300,
                   }}
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={toggleSwitch}

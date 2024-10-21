@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
 import Icon from 'react-native-vector-icons/Feather'
+import IconGraph from 'react-native-vector-icons/FontAwesome5'
 
 import { useTheme } from 'styled-components/native'
 
@@ -12,6 +13,7 @@ import { Home } from '../screens/Home'
 import { Transactions } from '../screens/Transactions'
 import { CreateTransaction } from '../screens/Transactions/CreateTransaction'
 import { EditTransaction } from '../screens/Transactions/EditTransaction'
+import { Currency } from '../screens/Currency'
 
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 
@@ -49,6 +51,16 @@ function MyTabs() {
           tabBarLabel: 'Transações',
           tabBarIcon: ({ color }) => (
             <Icon name="repeat" color={color} size={23} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="currency"
+        component={Currency}
+        options={{
+          tabBarLabel: 'Moedas',
+          tabBarIcon: ({ color }) => (
+            <IconGraph name="chart-line" color={color} size={23} />
           ),
         }}
       />

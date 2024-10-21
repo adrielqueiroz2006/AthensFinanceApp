@@ -20,6 +20,16 @@ import { Loading } from './src/components/Loading'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated'
+
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+})
+
 export default function App() {
   const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_700Bold })
   const [savedTheme, setSavedTheme] = useState('')
