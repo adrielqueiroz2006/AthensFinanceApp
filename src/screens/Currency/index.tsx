@@ -1,14 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { ScrollView, TouchableOpacity } from 'react-native'
 
-import {
-  CoinContainer,
-  Container,
-  Header,
-  Picture,
-  PriceText,
-  Title,
-} from './styles'
+import { Container } from './styles'
 
 import { CurrencyCard } from '../../components/CurrencyCard'
 import { CurrencyChart } from '../../components/CurrencyChart'
@@ -17,8 +10,6 @@ import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
-
-import auth from '@react-native-firebase/auth'
 
 import { useExchanges } from '../../contexts/ExchangeContext'
 
@@ -41,8 +32,6 @@ export type CurrencyProps = {
 }
 
 export function Currency() {
-  const user = auth().currentUser
-
   const [baseCurrency, setBaseCurrency] = useState('USD')
 
   const bottomSheetRef = useRef<BottomSheet>(null)

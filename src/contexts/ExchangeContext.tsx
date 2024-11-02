@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext } from 'react'
 import firestore from '@react-native-firebase/firestore'
 import auth from '@react-native-firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { parse } from 'date-fns'
 
 type Category = {
   id: number
@@ -13,6 +14,7 @@ type TypeStyleProps = 'GANHO' | 'GASTO'
 
 type ExchangeProps = {
   id: string
+  details: string
   category: Category
   type: TypeStyleProps
   date: string
@@ -48,10 +50,19 @@ export const ExchangeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [exchanges, setExchanges] = useState<ExchangeProps[]>([])
 
+  function orderByDate(exchanges: ExchangeProps[]) {
+    return exchanges.sort((a, b) => {
+      const dateA = parse(a.date, 'dd/MM/yy', new Date())
+      const dateB = parse(b.date, 'dd/MM/yy', new Date())
+
+      return dateB.getTime() - dateA.getTime()
+    })
+  }
+
   async function loadExchanges() {
     const email = auth().currentUser?.email
     if (email) {
-      const storedExchanges = await AsyncStorage.getItem(email)
+      const storedExchanges = await AsyncStorage.getItem(`${email}@exchanges`)
       if (storedExchanges) {
         setExchanges(JSON.parse(storedExchanges))
       } else {
@@ -62,7 +73,10 @@ export const ExchangeProvider: React.FC<{ children: React.ReactNode }> = ({
         if (userExchanges.exists) {
           const fetchedExchanges = userExchanges.data()?.exchanges || []
           setExchanges(fetchedExchanges)
-          await AsyncStorage.setItem(email, JSON.stringify(fetchedExchanges))
+          await AsyncStorage.setItem(
+            `${email}@exchanges`,
+            JSON.stringify(fetchedExchanges)
+          )
         }
       }
     }
@@ -71,20 +85,31 @@ export const ExchangeProvider: React.FC<{ children: React.ReactNode }> = ({
   async function addExchange(newExchange: ExchangeProps) {
     const email = auth().currentUser?.email
     if (email) {
-      const updatedExchanges = [...exchanges, newExchange]
+      const updatedExchanges = orderByDate([...exchanges, newExchange])
       setExchanges(updatedExchanges)
 
       await firestore()
         .collection('users')
         .doc(email)
-        .set({ exchanges: updatedExchanges })
+        .set({ exchanges: updatedExchanges }, { merge: true })
 
-      await AsyncStorage.setItem(email, JSON.stringify(updatedExchanges))
+      await AsyncStorage.setItem(
+        `${email}@exchanges`,
+        JSON.stringify(updatedExchanges)
+      )
     }
   }
 
   async function deleteAllExchanges() {
-    setExchanges([])
+    const email = auth().currentUser?.email
+    if (email) {
+      setExchanges([])
+      await firestore()
+        .collection('users')
+        .doc(email)
+        .set({ exchanges: [] }, { merge: true })
+      await AsyncStorage.setItem(`${email}@exchanges`, JSON.stringify([]))
+    }
   }
 
   async function deleteExchange(exchangeId: string) {
@@ -97,8 +122,11 @@ export const ExchangeProvider: React.FC<{ children: React.ReactNode }> = ({
       await firestore()
         .collection('users')
         .doc(email)
-        .set({ exchanges: updatedExchanges })
-      await AsyncStorage.setItem(email, JSON.stringify(updatedExchanges))
+        .set({ exchanges: updatedExchanges }, { merge: true })
+      await AsyncStorage.setItem(
+        `${email}@exchanges`,
+        JSON.stringify(updatedExchanges)
+      )
     }
   }
 
@@ -112,8 +140,11 @@ export const ExchangeProvider: React.FC<{ children: React.ReactNode }> = ({
       await firestore()
         .collection('users')
         .doc(email)
-        .set({ exchanges: updatedExchanges })
-      await AsyncStorage.setItem(email, JSON.stringify(updatedExchanges))
+        .set({ exchanges: updatedExchanges }, { merge: true })
+      await AsyncStorage.setItem(
+        `${email}@exchanges`,
+        JSON.stringify(updatedExchanges)
+      )
     }
   }
 

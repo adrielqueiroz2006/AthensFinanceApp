@@ -3,7 +3,7 @@ import {
   ChartContainer,
   CoinDetailsContainer,
   CoinDetailsWrapper,
-  CointDetailsText,
+  CoinDetailsText,
   CoinText,
   ColumnLeft,
   ColumnRight,
@@ -164,7 +164,7 @@ export function CurrencyChart({
                 .replace('.', ',')}
             </CoinText>
 
-            <CoinText style={{ color: themes.COLORS.GRAY_500 }}>
+            <CoinText style={{ color: themes.COLORS.GRAY_600 }}>
               {baseCurrency}
             </CoinText>
           </ColumnLeft>
@@ -258,12 +258,12 @@ export function CurrencyChart({
       <TimeContainer>
         <TimeOptionContainer
           style={
-            time === 7 ? { backgroundColor: themes.COLORS.GRAY_100 } : null
+            time === 7 ? { backgroundColor: themes.COLORS.GRAY_200 } : null
           }
           onPress={() => (setTime(7), setTimeStamp('Semana'))}
         >
           <TimeOptionText
-            style={time === 7 ? { color: themes.COLORS.GRAY_700 } : null}
+            style={time === 7 ? { color: themes.COLORS.GRAY_900 } : null}
           >
             1S
           </TimeOptionText>
@@ -299,13 +299,13 @@ export function CurrencyChart({
       <CoinDetailsContainer style={{ paddingBottom: 15 }}>
         <CoinDetailsWrapper>
           <ColumnLeft>
-            <CointDetailsText>Conta</CointDetailsText>
+            <CoinDetailsText>Conta</CoinDetailsText>
 
             <CoinText>R${total.toFixed(2).replace('.', ',')}</CoinText>
           </ColumnLeft>
 
           <ColumnRight>
-            <CointDetailsText>Valor</CointDetailsText>
+            <CoinDetailsText>Valor</CoinDetailsText>
 
             <CoinText>
               {coinSymbolMap[baseCurrency]}

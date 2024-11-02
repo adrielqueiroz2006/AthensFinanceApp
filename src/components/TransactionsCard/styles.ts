@@ -37,6 +37,7 @@ export const DetailTitle = styled.Text`
 
 export const DetailDate = styled.Text`
   font-size: ${({ theme }) => theme.FONT_SIZE.XS}px;
+  font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
   color: ${({ theme }) => theme.COLORS.GRAY_900};
 `
 

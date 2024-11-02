@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
 import Icon from 'react-native-vector-icons/Feather'
-import IconGraph from 'react-native-vector-icons/FontAwesome5'
+import IconAwesome from 'react-native-vector-icons/FontAwesome5'
 
 import { useTheme } from 'styled-components/native'
 
@@ -13,9 +13,11 @@ import { Home } from '../screens/Home'
 import { Transactions } from '../screens/Transactions'
 import { CreateTransaction } from '../screens/Transactions/CreateTransaction'
 import { EditTransaction } from '../screens/Transactions/EditTransaction'
+import { Payments } from '../screens/Payments'
 import { Currency } from '../screens/Currency'
 
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import { CreatePayment } from '../screens/Payments/CreatePayment'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
@@ -55,12 +57,22 @@ function MyTabs() {
         }}
       />
       <Tab.Screen
+        name="payments"
+        component={Payments}
+        options={{
+          tabBarLabel: 'Contas',
+          tabBarIcon: ({ color }) => (
+            <IconAwesome name="credit-card" color={color} size={23} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="currency"
         component={Currency}
         options={{
-          tabBarLabel: 'Moedas',
+          tabBarLabel: 'Cotação',
           tabBarIcon: ({ color }) => (
-            <IconGraph name="chart-line" color={color} size={23} />
+            <IconAwesome name="chart-line" color={color} size={23} />
           ),
         }}
       />
@@ -95,6 +107,8 @@ export function AppRoutes() {
           <Screen name="createTransaction" component={CreateTransaction} />
 
           <Screen name="editTransaction" component={EditTransaction} />
+
+          <Screen name="createPayment" component={CreatePayment} />
         </>
       )}
     </Navigator>

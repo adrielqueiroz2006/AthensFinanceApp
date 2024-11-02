@@ -43,6 +43,7 @@ type Category = {
 type ExchangeProps = {
   id: string
   category: Category
+  details: string
   type: TypeStyleProps
   date: string
   price: string
@@ -63,6 +64,7 @@ export function CreateTransaction() {
     name: 'Compras',
     icon: 'shopping-cart',
   })
+  const [details, setDetails] = useState('')
   const [ganho, setGanho] = useState(currentTab === 'GASTO' ? true : false)
   const [showDate, setShowDate] = useState(false)
   const [date, setDate] = useState(new Date())
@@ -97,6 +99,7 @@ export function CreateTransaction() {
 
   async function handleAddExchange({
     id,
+    details,
     category,
     type,
     date,
@@ -117,6 +120,7 @@ export function CreateTransaction() {
 
     const newExchange = {
       id,
+      details,
       category,
       type,
       date,
@@ -152,6 +156,18 @@ export function CreateTransaction() {
           keyboardShouldPersistTaps="handled"
         >
           <InputMenu>
+            <InputContainer>
+              <InputTitle>Detalhes (Opcional)</InputTitle>
+              <Input>
+                <ValueInput
+                  value={details}
+                  placeholder="Detalhes"
+                  onChangeText={(text) => setDetails(text)}
+                  placeholderTextColor={themes.COLORS.GRAY_900}
+                />
+              </Input>
+            </InputContainer>
+
             <InputContainer>
               <InputTitle>Categoria</InputTitle>
               <Picker
@@ -252,6 +268,7 @@ export function CreateTransaction() {
             onPress={() => {
               handleAddExchange({
                 id: uuid.v4().toString(),
+                details,
                 category,
                 type: !ganho ? 'GANHO' : 'GASTO',
                 date: fixedDate,

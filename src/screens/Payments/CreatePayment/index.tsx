@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Alert, Platform, ScrollView, Switch } from 'react-native'
 
-import { useExchanges } from '../../../contexts/ExchangeContext'
+import { usePayments } from '../../../contexts/PaymentContext'
 
 import {
   DateButton,
@@ -27,12 +27,17 @@ import { Button } from '../../../components/Button'
 
 import uuid from 'react-native-uuid'
 
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 import { Picker } from '@react-native-picker/picker'
-import { categories } from '../../../utils/category'
 
-type TypeStyleProps = 'GANHO' | 'GASTO'
+import { categories } from '../../../utils/category'
+import { types } from '../../../utils/types'
+
+type PaymentType = {
+  id: number
+  name: string
+}
 
 type Category = {
   id: number
@@ -40,57 +45,64 @@ type Category = {
   icon: string
 }
 
-type ExchangeProps = {
+type PaymentProps = {
   id: string
-  details: string
+  type: PaymentType
   category: Category
-  type: TypeStyleProps
+  details: string
   date: string
   price: string
 }
 
-type RootParamList = {
-  editTransaction: { exchange: ExchangeProps }
-}
+export function CreatePayment() {
+  const { addPayment } = usePayments()
 
-export function EditTransaction() {
-  const { editExchange } = useExchanges()
-
-  const route = useRoute<RouteProp<RootParamList, 'editTransaction'>>()
-  const { exchange } = route.params
-
-  const [details, setDetails] = useState(exchange.details)
-  const [category, setCategory] = useState(exchange.category)
-  const [ganho, setGanho] = useState(exchange.type === 'GASTO' ? true : false)
+  const [type, setType] = useState({
+    id: 1,
+    name: 'Cartão de Crédito',
+  })
+  const [category, setCategory] = useState({
+    id: 1,
+    name: 'Compras',
+    icon: 'shopping-cart',
+  })
+  const [details, setDetails] = useState('')
   const [showDate, setShowDate] = useState(false)
-  const [date, setDate] = useState(exchange.date)
-  const [price, setPrice] = useState(exchange.price)
+  const [date, setDate] = useState(new Date())
+  const [fixedDate, setFixedDate] = useState('')
+  const [price, setPrice] = useState('')
 
   const themes = useTheme()
 
   const navigation = useNavigation()
 
-  const toggleSwitch = () => setGanho((previousState) => !previousState)
+  function onChangeFixedDate() {
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const year = String(date.getFullYear()).slice(-2)
+    const fixedDateString = `${day}/${month}/${year}`
 
-  const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || new Date()
-    setShowDate(Platform.OS === 'ios')
-
-    const day = String(currentDate.getDate()).padStart(2, '0')
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0')
-    const year = String(currentDate.getFullYear()).slice(-2)
-    const fixedDate = `${day}/${month}/${year}`
-    setDate(fixedDate)
+    setFixedDate(fixedDateString)
   }
 
-  async function handleEditExchange({
+  useEffect(() => {
+    onChangeFixedDate()
+  })
+
+  const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    const currentDate = selectedDate || date
+    setShowDate(Platform.OS === 'ios')
+    setDate(currentDate)
+    onChangeFixedDate()
+  }
+
+  async function handleAddPayment({
     id,
     details,
     category,
-    type,
     date,
     price,
-  }: ExchangeProps) {
+  }: PaymentProps) {
     if (Number(price) <= 0)
       return Alert.alert(
         'Valor inválido',
@@ -104,27 +116,39 @@ export function EditTransaction() {
       )
     }
 
-    const newExchange = {
+    const newPayment = {
       id,
       details,
-      category,
       type,
+      category,
       date,
       price,
     }
 
     try {
-      await editExchange(newExchange)
+      await addPayment(newPayment)
     } catch (error) {
       console.log(error)
     }
+
+    setType({
+      id: 1,
+      name: 'Cartão de Crédito',
+    })
+    setCategory({
+      id: 1,
+      name: 'Compras',
+      icon: 'shopping-cart',
+    })
+    setDate(new Date())
+    setPrice('')
 
     navigation.goBack()
   }
 
   return (
     <Container>
-      <Header title="Editar Transação" />
+      <Header title="Adicionar Conta" />
       <Wrapper>
         <ScrollView
           contentContainerStyle={{
@@ -144,6 +168,29 @@ export function EditTransaction() {
                   placeholderTextColor={themes.COLORS.GRAY_900}
                 />
               </Input>
+            </InputContainer>
+
+            <InputContainer>
+              <InputTitle>Tipo de pagamento</InputTitle>
+              <Picker
+                selectedValue={type}
+                onValueChange={(itemValue, itemIndex) => setType(itemValue)}
+                style={{
+                  padding: 10,
+                  marginTop: 10,
+                  borderRadius: 8,
+                  backgroundColor: themes.COLORS.GRAY_100,
+                  color: themes.COLORS.GRAY_900,
+                }}
+                dropdownIconColor={themes.COLORS.GRAY_900}
+                itemStyle={{
+                  color: themes.COLORS.GRAY_900,
+                }}
+              >
+                {types.map((type, index) => (
+                  <Picker.Item key={index} label={type.name} value={type} />
+                ))}
+              </Picker>
             </InputContainer>
 
             <InputContainer>
@@ -174,44 +221,10 @@ export function EditTransaction() {
             </InputContainer>
 
             <InputContainer>
-              <InputTitle>Tipo de Transação</InputTitle>
-              <InputRow>
-                <TransactionType
-                  style={
-                    !ganho
-                      ? { color: themes.COLORS.BRAND_DARK }
-                      : { color: themes.COLORS.GRAY_900 }
-                  }
-                >
-                  Ganho
-                </TransactionType>
-                <Switch
-                  thumbColor={themes.COLORS.BRAND_DARK}
-                  trackColor={{
-                    false: themes.COLORS.GRAY_300,
-                    true: themes.COLORS.GRAY_300,
-                  }}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleSwitch}
-                  value={ganho}
-                />
-                <TransactionType
-                  style={
-                    ganho
-                      ? { color: themes.COLORS.BRAND_DARK }
-                      : { color: themes.COLORS.GRAY_900 }
-                  }
-                >
-                  Gasto
-                </TransactionType>
-              </InputRow>
-            </InputContainer>
-
-            <InputContainer>
               <InputTitle>Data</InputTitle>
               <Input>
                 <DateButton onPress={() => setShowDate(true)}>
-                  <DateText>{date}</DateText>
+                  <DateText>{fixedDate}</DateText>
                 </DateButton>
               </Input>
             </InputContainer>
@@ -219,7 +232,7 @@ export function EditTransaction() {
             {showDate && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={new Date()}
+                value={date}
                 mode="date"
                 display="calendar"
                 onChange={onChangeDate}
@@ -244,13 +257,13 @@ export function EditTransaction() {
             title="Salvar"
             isWhite={'BLACK'}
             onPress={() => {
-              handleEditExchange({
-                id: exchange.id,
+              handleAddPayment({
+                id: uuid.v4().toString(),
                 details,
+                type,
                 category,
-                type: !ganho ? 'GANHO' : 'GASTO',
-                date: date,
-                price: Number(price).toFixed(2),
+                date: fixedDate,
+                price: Number(price.replace(',', '.')).toFixed(2),
               })
             }}
           />

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { FlatList } from 'react-native'
 
 import { useExchanges } from '../../contexts/ExchangeContext'
@@ -19,7 +19,7 @@ export function Gastos() {
 
   async function fetchExchanges() {
     try {
-      loadExchanges()
+      await loadExchanges()
     } catch (error) {
       console.log(error)
     }
@@ -50,11 +50,12 @@ export function Gastos() {
             >
               <TransactionsCard
                 key={item.id}
+                details={item.details}
+                category={item.category.name}
+                type={item.type}
+                icon={item.category.icon}
                 date={item.date}
                 value={item.price.toString().replace('.', ',')}
-                details={item.category.name}
-                icon={item.category.icon}
-                type={item.type}
               />
             </Swipeable>
           )}

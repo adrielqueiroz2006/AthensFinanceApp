@@ -15,15 +15,18 @@ import { Wrapper } from '../../components/Wrapper'
 
 import { useTheme } from 'styled-components'
 import { useFocusEffect } from '@react-navigation/native'
+import { usePayments } from '../../contexts/PaymentContext'
 
 export function Home() {
   const themes = useTheme()
 
   const { exchanges, loadExchanges } = useExchanges()
+  const { loadPayments, deleteAllPayments } = usePayments()
 
-  async function fetchExchanges() {
+  async function fetchData() {
     try {
       loadExchanges()
+      loadPayments()
     } catch (error) {
       console.log(error)
     }
@@ -31,7 +34,7 @@ export function Home() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchExchanges()
+      fetchData()
     }, [])
   )
 

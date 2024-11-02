@@ -6,7 +6,8 @@ export declare global {
       transactions: undefined
       createTransaction: { currentTab: TypeStyleProps }
       editTransaction: { exchange: ExchangeProps }
-      currency: undefined
+      payments: undefined
+      createPayment: undefined
     }
   }
 }

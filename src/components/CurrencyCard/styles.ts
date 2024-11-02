@@ -40,7 +40,7 @@ export const PriceContainer = styled.View`
 `
 
 export const PriceText = styled.Text`
-  color: ${({ theme }) => theme.COLORS.GRAY_600};
+  color: ${({ theme }) => theme.COLORS.GRAY_900};
   font-size: ${({ theme }) => theme.FONT_SIZE.LG}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `

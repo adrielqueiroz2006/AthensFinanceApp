@@ -52,8 +52,8 @@ export const CoinText = styled.Text`
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `
 
-export const CointDetailsText = styled.Text`
-  color: ${({ theme }) => theme.COLORS.GRAY_400};
+export const CoinDetailsText = styled.Text`
+  color: ${({ theme }) => theme.COLORS.GRAY_600};
   font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `

@@ -12,14 +12,22 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
 type Props = {
+  details: string
+  category: string
+  type: PriceStyleProps
+  icon: string
   date: string
   value: string
-  details: string
-  icon: string
-  type: PriceStyleProps
 }
 
-export function TransactionsCard({ date, value, details, icon, type }: Props) {
+export function TransactionsCard({
+  details,
+  category,
+  type,
+  icon,
+  date,
+  value,
+}: Props) {
   return (
     <Container>
       <IconContainer>
@@ -27,7 +35,7 @@ export function TransactionsCard({ date, value, details, icon, type }: Props) {
       </IconContainer>
 
       <DetailsContainer>
-        <DetailTitle>{details}</DetailTitle>
+        <DetailTitle>{category}</DetailTitle>
         <DetailDate>{date}</DetailDate>
       </DetailsContainer>
 

@@ -31,8 +31,9 @@ function TabTop({
         lazy: true,
         tabBarActiveTintColor: themes.COLORS.BRAND_DARK,
         tabBarLabelStyle: {
-          fontSize: themes.FONT_SIZE.XS,
+          fontSize: themes.FONT_SIZE.SM,
           color: themes.COLORS.GRAY_900,
+          textTransform: 'none',
         },
 
         tabBarStyle: {

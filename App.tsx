@@ -5,6 +5,7 @@ import 'react-native-get-random-values'
 import { ThemeProvider } from './src/theme/Theme'
 
 import { ExchangeProvider } from './src/contexts/ExchangeContext'
+import { PaymentProvider } from './src/contexts/PaymentContext'
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
@@ -52,7 +53,9 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider>
         <ExchangeProvider>
-          <Routes />
+          <PaymentProvider>
+            <Routes />
+          </PaymentProvider>
         </ExchangeProvider>
       </ThemeProvider>
     </GestureHandlerRootView>

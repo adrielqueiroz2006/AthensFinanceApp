@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { Switch, TouchableOpacity } from 'react-native'
 
 import { useExchanges } from '../../contexts/ExchangeContext'
+import { usePayments } from '../../contexts/PaymentContext'
 
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
@@ -19,7 +20,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export function HomeHeader() {
   const user = auth().currentUser
+
   const { deleteAllExchanges } = useExchanges()
+  const { deleteAllPayments } = usePayments()
 
   const themes = useTheme()
 
@@ -35,6 +38,7 @@ export function HomeHeader() {
       await auth().signOut()
       await GoogleSignin.signOut()
       deleteAllExchanges()
+      deleteAllPayments()
     }
   }
 

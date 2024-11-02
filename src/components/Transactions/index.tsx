@@ -46,11 +46,12 @@ export function Transactions() {
         >
           <TransactionsCard
             key={item.id}
+            details={item.details}
+            category={item.category.name}
+            type={item.type}
+            icon={item.category.icon}
             date={item.date}
             value={item.price.toString().replace('.', ',')}
-            details={item.category.name}
-            icon={item.category.icon}
-            type={item.type}
           />
         </Swipeable>
       ))}
