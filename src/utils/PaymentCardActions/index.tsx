@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useExchanges } from '../../contexts/ExchangeContext'
+import { usePayments } from '../../contexts/PaymentContext'
 
 import { Container, IconContainer } from './styles'
 
@@ -10,7 +10,10 @@ import { useNavigation } from '@react-navigation/native'
 
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-type TypeStyleProps = 'GANHO' | 'GASTO'
+type PaymentType = {
+  id: number
+  name: string
+}
 
 type Category = {
   id: number
@@ -18,20 +21,22 @@ type Category = {
   icon: string
 }
 
-type ExchangeProps = {
+type PaymentProps = {
   id: string
+  details: string
+  type: PaymentType
   category: Category
-  type: TypeStyleProps
   date: string
   price: string
 }
 
 type Props = {
-  exchange: ExchangeProps
+  payment: PaymentProps
 }
 
-export function CardActions({ exchange }: Props) {
-  const { deleteExchange } = useExchanges()
+export function PaymentCardActions({ payment }: Props) {
+  const { deletePayment } = usePayments()
+  const { payPayment } = usePayments()
 
   const themes = useTheme()
 
@@ -41,14 +46,21 @@ export function CardActions({ exchange }: Props) {
     <Container>
       <IconContainer
         style={{ backgroundColor: themes.COLORS.BLUE, marginLeft: 10 }}
-        onPress={() => navigation.navigate('editTransaction', { exchange })}
+        onPress={() => navigation.navigate('editPayment', { payment })}
       >
         <Icon name="pen" color={'white'} size={15} />
       </IconContainer>
 
       <IconContainer
+        style={{ backgroundColor: themes.COLORS.GREEN, marginLeft: 10 }}
+        onPress={() => payPayment(payment)}
+      >
+        <Icon name="check" color={'white'} size={15} />
+      </IconContainer>
+
+      <IconContainer
         style={{ backgroundColor: themes.COLORS.RED, marginLeft: 10 }}
-        onPress={() => deleteExchange(exchange.id)}
+        onPress={() => deletePayment(payment.id)}
       >
         <Icon name="trash" color={'white'} size={15} />
       </IconContainer>

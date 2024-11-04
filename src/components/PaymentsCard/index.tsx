@@ -14,8 +14,9 @@ import {
 import { useTheme } from 'styled-components'
 
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import PaymentTypeIcon from 'react-native-vector-icons/FontAwesome6'
 
-import { format, parse, differenceInCalendarDays } from 'date-fns'
+import { parse, differenceInCalendarDays } from 'date-fns'
 
 type Props = {
   date: string
@@ -59,12 +60,36 @@ export function PaymentsCard({
     const compareDate = parse(dateString, 'dd/MM/yy', new Date())
     const differenceDays = differenceInCalendarDays(compareDate, currentDate)
 
-    let color: string
-
     if (differenceDays < 0) {
       return themes.COLORS.RED
     } else {
       return themes.COLORS.GRAY_900
+    }
+  }
+
+  function formatTypeIcon(type: string) {
+    switch (type) {
+      case 'Boleto':
+        return 'file-invoice-dollar'
+      case 'Pix':
+        return 'pix'
+      case 'Dinheiro':
+        return 'money-bill-wave'
+      default:
+        return 'credit-card'
+    }
+  }
+
+  function formatTypeColor(type: string) {
+    switch (type) {
+      case 'Boleto':
+        return themes.COLORS.BLUE
+      case 'Pix':
+        return themes.COLORS.GREEN
+      case 'Dinheiro':
+        return themes.COLORS.GREEN
+      default:
+        return themes.COLORS.GRAY_900
     }
   }
 
@@ -90,7 +115,10 @@ export function PaymentsCard({
       <PriceContainer>
         <Price>R$ {value}</Price>
         <PriceTypeContainer>
-          <Icon name="circle" solid color={themes.COLORS.GREEN} />
+          <PaymentTypeIcon
+            name={formatTypeIcon(type)}
+            color={formatTypeColor(type)}
+          />
           <PriceType>{type}</PriceType>
         </PriceTypeContainer>
       </PriceContainer>

@@ -9,7 +9,7 @@ import { TransactionsCard } from '../TransactionsCard'
 
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 
-import { CardActions } from '../../utils/CardActions'
+import { ExchangeCardActions } from '../../utils/ExchangeCardActions'
 
 export function Transactions() {
   const { exchanges, loadExchanges } = useExchanges()
@@ -41,7 +41,7 @@ export function Transactions() {
         <Swipeable
           ref={cardActionsSwipeable}
           key={item.id}
-          renderRightActions={() => <CardActions exchange={item} />}
+          renderRightActions={() => <ExchangeCardActions exchange={item} />}
           overshootRight={false}
         >
           <TransactionsCard

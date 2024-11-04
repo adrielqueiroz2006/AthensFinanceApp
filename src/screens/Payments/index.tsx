@@ -12,10 +12,6 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
 import { useTheme } from 'styled-components'
 
-import { PaymentsCard } from '../../components/PaymentsCard'
-
-import { FlatList } from 'react-native-gesture-handler'
-
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
 import { AllPayments } from './allPayments'

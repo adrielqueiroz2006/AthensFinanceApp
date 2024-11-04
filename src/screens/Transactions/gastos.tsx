@@ -11,7 +11,7 @@ import { useFocusEffect } from '@react-navigation/native'
 
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 
-import { CardActions } from '../../utils/CardActions'
+import { ExchangeCardActions } from '../../utils/ExchangeCardActions'
 
 export function Gastos() {
   const { exchanges, loadExchanges } = useExchanges()
@@ -45,7 +45,7 @@ export function Gastos() {
             <Swipeable
               ref={cardActionsSwipeable}
               key={item.id}
-              renderRightActions={() => <CardActions exchange={item} />}
+              renderRightActions={() => <ExchangeCardActions exchange={item} />}
               overshootRight={false}
             >
               <TransactionsCard

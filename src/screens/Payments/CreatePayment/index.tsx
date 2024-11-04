@@ -104,16 +104,10 @@ export function CreatePayment() {
     price,
   }: PaymentProps) {
     if (Number(price) <= 0)
-      return Alert.alert(
-        'Valor inválido',
-        'Informe um valor para essa transação!'
-      )
+      return Alert.alert('Valor inválido', 'Informe um valor para essa conta!')
 
     if (isNaN(Number(price))) {
-      return Alert.alert(
-        'Valor inválido',
-        'Informe um valor para essa transação!'
-      )
+      return Alert.alert('Valor inválido', 'Informe um valor para essa conta!')
     }
 
     const newPayment = {

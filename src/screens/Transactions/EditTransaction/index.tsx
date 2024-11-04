@@ -30,7 +30,9 @@ import uuid from 'react-native-uuid'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
 import { Picker } from '@react-native-picker/picker'
+
 import { categories } from '../../../utils/category'
+import { parse } from 'date-fns'
 
 type TypeStyleProps = 'GANHO' | 'GASTO'
 
@@ -219,7 +221,7 @@ export function EditTransaction() {
             {showDate && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={new Date()}
+                value={parse(date, 'dd/MM/yy', new Date())}
                 mode="date"
                 display="calendar"
                 onChange={onChangeDate}

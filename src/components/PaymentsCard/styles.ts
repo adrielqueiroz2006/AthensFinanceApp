@@ -2,7 +2,6 @@ import styled from 'styled-components/native'
 
 export const Container = styled.View`
   padding: 18px 12px;
-  margin-bottom: 15px;
   flex-direction: row;
   align-items: center;
   background-color: ${({ theme }) => theme.COLORS.BACKGROUND};

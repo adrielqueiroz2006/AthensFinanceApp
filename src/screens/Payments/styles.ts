@@ -18,12 +18,6 @@ export const TabWrapper = styled.View`
   flex: 1;
 `
 
-export const FilterContainer = styled.View``
-
-export const FilterOption = styled.TouchableOpacity``
-
-export const FilterText = styled.Text``
-
 export const Title = styled.Text`
   font-size: ${({ theme }) => theme.FONT_SIZE.XXL}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};

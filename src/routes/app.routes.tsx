@@ -18,6 +18,7 @@ import { Currency } from '../screens/Currency'
 
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { CreatePayment } from '../screens/Payments/CreatePayment'
+import { EditPayment } from '../screens/Payments/EditPayment'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
@@ -109,6 +110,8 @@ export function AppRoutes() {
           <Screen name="editTransaction" component={EditTransaction} />
 
           <Screen name="createPayment" component={CreatePayment} />
+
+          <Screen name="editPayment" component={EditPayment} />
         </>
       )}
     </Navigator>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Alert, Platform, ScrollView, Switch } from 'react-native'
 
-import { useExchanges } from '../../../contexts/ExchangeContext'
+import { usePayments } from '../../../contexts/PaymentContext'
 
 import {
   DateButton,
@@ -30,10 +30,15 @@ import uuid from 'react-native-uuid'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
 import { Picker } from '@react-native-picker/picker'
-
 import { categories } from '../../../utils/category'
 
-type TypeStyleProps = 'GANHO' | 'GASTO'
+import { types } from '../../../utils/types'
+import { parse } from 'date-fns'
+
+type PaymentType = {
+  id: number
+  name: string
+}
 
 type Category = {
   id: number
@@ -41,113 +46,82 @@ type Category = {
   icon: string
 }
 
-type ExchangeProps = {
+type PaymentProps = {
   id: string
+  type: PaymentType
   category: Category
   details: string
-  type: TypeStyleProps
   date: string
   price: string
 }
 
 type RootParamList = {
-  createTransaction: { currentTab: TypeStyleProps }
+  editPayment: { payment: PaymentProps }
 }
 
-export function CreateTransaction() {
-  const { addExchange } = useExchanges()
+export function EditPayment() {
+  const { editPayment } = usePayments()
 
-  const route = useRoute<RouteProp<RootParamList, 'createTransaction'>>()
-  const { currentTab } = route.params
+  const route = useRoute<RouteProp<RootParamList, 'editPayment'>>()
+  const { payment } = route.params
 
-  const [category, setCategory] = useState({
-    id: 1,
-    name: 'Compras',
-    icon: 'shopping-cart',
-  })
-  const [details, setDetails] = useState('')
-  const [ganho, setGanho] = useState(currentTab === 'GASTO' ? true : false)
+  const [type, setType] = useState(payment.type)
+  const [category, setCategory] = useState(payment.category)
+  const [details, setDetails] = useState(payment.details)
   const [showDate, setShowDate] = useState(false)
-  const [date, setDate] = useState(new Date())
-  const [fixedDate, setFixedDate] = useState('')
-  const [price, setPrice] = useState('')
+  const [date, setDate] = useState(payment.date)
+  const [price, setPrice] = useState(payment.price)
 
   const themes = useTheme()
 
   const navigation = useNavigation()
 
-  const toggleSwitch = () => setGanho((previousState) => !previousState)
-
-  function onChangeFixedDate() {
-    const day = String(date.getDate()).padStart(2, '0')
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const year = String(date.getFullYear()).slice(-2)
-    const fixedDateString = `${day}/${month}/${year}`
-
-    setFixedDate(fixedDateString)
-  }
-
-  useEffect(() => {
-    onChangeFixedDate()
-  })
-
   const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || date
+    const currentDate = selectedDate || new Date()
     setShowDate(Platform.OS === 'ios')
-    setDate(currentDate)
-    onChangeFixedDate()
+
+    const day = String(currentDate.getDate()).padStart(2, '0')
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+    const year = String(currentDate.getFullYear()).slice(-2)
+    const fixedDate = `${day}/${month}/${year}`
+    setDate(fixedDate)
   }
 
-  async function handleAddExchange({
+  async function handleEditPayment({
     id,
     details,
     category,
-    type,
     date,
     price,
-  }: ExchangeProps) {
+  }: PaymentProps) {
     if (Number(price) <= 0)
-      return Alert.alert(
-        'Valor inválido',
-        'Informe um valor para essa transação!'
-      )
+      return Alert.alert('Valor inválido', 'Informe um valor para essa conta!')
 
     if (isNaN(Number(price))) {
-      return Alert.alert(
-        'Valor inválido',
-        'Informe um valor para essa transação!'
-      )
+      return Alert.alert('Valor inválido', 'Informe um valor para essa conta!')
     }
 
-    const newExchange = {
+    const newPayment = {
       id,
       details,
-      category,
       type,
+      category,
       date,
       price,
     }
 
     try {
-      await addExchange(newExchange)
+      await editPayment(newPayment)
     } catch (error) {
       console.log(error)
     }
-
-    setCategory({
-      id: 1,
-      name: 'Compras',
-      icon: 'shopping-cart',
-    })
-    setDate(new Date())
-    setPrice('')
 
     navigation.goBack()
   }
 
   return (
     <Container>
-      <Header title="Nova Transação" />
+      <Header title="Adicionar Conta" />
       <Wrapper>
         <ScrollView
           contentContainerStyle={{
@@ -167,6 +141,29 @@ export function CreateTransaction() {
                   placeholderTextColor={themes.COLORS.GRAY_900}
                 />
               </Input>
+            </InputContainer>
+
+            <InputContainer>
+              <InputTitle>Tipo de pagamento</InputTitle>
+              <Picker
+                selectedValue={type}
+                onValueChange={(itemValue, itemIndex) => setType(itemValue)}
+                style={{
+                  padding: 10,
+                  marginTop: 10,
+                  borderRadius: 8,
+                  backgroundColor: themes.COLORS.GRAY_100,
+                  color: themes.COLORS.GRAY_900,
+                }}
+                dropdownIconColor={themes.COLORS.GRAY_900}
+                itemStyle={{
+                  color: themes.COLORS.GRAY_900,
+                }}
+              >
+                {types.map((type, index) => (
+                  <Picker.Item key={index} label={type.name} value={type} />
+                ))}
+              </Picker>
             </InputContainer>
 
             <InputContainer>
@@ -197,44 +194,10 @@ export function CreateTransaction() {
             </InputContainer>
 
             <InputContainer>
-              <InputTitle>Tipo de Transação</InputTitle>
-              <InputRow>
-                <TransactionType
-                  style={
-                    !ganho
-                      ? { color: themes.COLORS.BRAND_DARK }
-                      : { color: themes.COLORS.GRAY_900 }
-                  }
-                >
-                  Ganho
-                </TransactionType>
-                <Switch
-                  thumbColor={themes.COLORS.BRAND_DARK}
-                  trackColor={{
-                    false: themes.COLORS.GRAY_300,
-                    true: themes.COLORS.GRAY_300,
-                  }}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleSwitch}
-                  value={ganho}
-                />
-                <TransactionType
-                  style={
-                    ganho
-                      ? { color: themes.COLORS.BRAND_DARK }
-                      : { color: themes.COLORS.GRAY_900 }
-                  }
-                >
-                  Gasto
-                </TransactionType>
-              </InputRow>
-            </InputContainer>
-
-            <InputContainer>
               <InputTitle>Data</InputTitle>
               <Input>
                 <DateButton onPress={() => setShowDate(true)}>
-                  <DateText>{fixedDate}</DateText>
+                  <DateText>{date}</DateText>
                 </DateButton>
               </Input>
             </InputContainer>
@@ -242,7 +205,7 @@ export function CreateTransaction() {
             {showDate && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={date}
+                value={parse(date, 'dd/MM/yy', new Date())}
                 mode="date"
                 display="calendar"
                 onChange={onChangeDate}
@@ -267,12 +230,12 @@ export function CreateTransaction() {
             title="Salvar"
             isWhite={'BLACK'}
             onPress={() => {
-              handleAddExchange({
-                id: uuid.v4().toString(),
+              handleEditPayment({
+                id: payment.id,
                 details,
+                type,
                 category,
-                type: !ganho ? 'GANHO' : 'GASTO',
-                date: fixedDate,
+                date: date,
                 price: Number(price.replace(',', '.')).toFixed(2),
               })
             }}

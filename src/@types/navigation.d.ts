@@ -8,6 +8,7 @@ export declare global {
       editTransaction: { exchange: ExchangeProps }
       payments: undefined
       createPayment: undefined
+      editPayment: { payment: PaymentProps }
     }
   }
 }
