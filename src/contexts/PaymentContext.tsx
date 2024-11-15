@@ -31,6 +31,7 @@ type ExchangeProps = {
   id: string
   details: string
   category: Category
+  paymentType: PaymentType
   type: TypeStyleProps
   date: string
   price: string
@@ -175,6 +176,7 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({
         id: paymentToPay.id,
         details: paymentToPay.details,
         category: paymentToPay.category,
+        paymentType: paymentToPay.type,
         type: 'GASTO',
         date: fixedDateString,
         price: paymentToPay.price,

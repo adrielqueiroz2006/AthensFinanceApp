@@ -32,6 +32,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { Picker } from '@react-native-picker/picker'
 
 import { categories } from '../../../utils/category'
+import { types as payTypes } from '../../../utils/types'
 
 type TypeStyleProps = 'GANHO' | 'GASTO'
 
@@ -41,10 +42,16 @@ type Category = {
   icon: string
 }
 
+type PaymentType = {
+  id: number
+  name: string
+}
+
 type ExchangeProps = {
   id: string
   category: Category
   details: string
+  paymentType: PaymentType
   type: TypeStyleProps
   date: string
   price: string
@@ -64,6 +71,10 @@ export function CreateTransaction() {
     id: 1,
     name: 'Compras',
     icon: 'shopping-cart',
+  })
+  const [paymentType, setPaymentType] = useState({
+    id: 1,
+    name: 'Cartão de Crédito',
   })
   const [details, setDetails] = useState('')
   const [ganho, setGanho] = useState(currentTab === 'GASTO' ? true : false)
@@ -123,6 +134,7 @@ export function CreateTransaction() {
       id,
       details,
       category,
+      paymentType,
       type,
       date,
       price,
@@ -192,6 +204,31 @@ export function CreateTransaction() {
                     label={category.name}
                     value={category}
                   />
+                ))}
+              </Picker>
+            </InputContainer>
+
+            <InputContainer>
+              <InputTitle>Método de transação</InputTitle>
+              <Picker
+                selectedValue={paymentType}
+                onValueChange={(itemValue, itemIndex) =>
+                  setPaymentType(itemValue)
+                }
+                style={{
+                  padding: 10,
+                  marginTop: 10,
+                  borderRadius: 8,
+                  backgroundColor: themes.COLORS.GRAY_100,
+                  color: themes.COLORS.GRAY_900,
+                }}
+                dropdownIconColor={themes.COLORS.GRAY_900}
+                itemStyle={{
+                  color: themes.COLORS.GRAY_900,
+                }}
+              >
+                {payTypes.map((type, index) => (
+                  <Picker.Item key={index} label={type.name} value={type} />
                 ))}
               </Picker>
             </InputContainer>
@@ -271,6 +308,7 @@ export function CreateTransaction() {
                 id: uuid.v4().toString(),
                 details,
                 category,
+                paymentType,
                 type: !ganho ? 'GANHO' : 'GASTO',
                 date: fixedDate,
                 price: Number(price.replace(',', '.')).toFixed(2),

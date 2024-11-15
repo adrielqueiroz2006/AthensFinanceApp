@@ -10,15 +10,17 @@ import { useTheme } from 'styled-components/native'
 
 import { SignIn } from '../screens/SignIn'
 import { Home } from '../screens/Home'
+import { Statement } from '../screens/Statement'
+import { StatementDownload } from '../screens/StatementDownload'
 import { Transactions } from '../screens/Transactions'
 import { CreateTransaction } from '../screens/Transactions/CreateTransaction'
 import { EditTransaction } from '../screens/Transactions/EditTransaction'
 import { Payments } from '../screens/Payments'
+import { CreatePayment } from '../screens/Payments/CreatePayment'
+import { EditPayment } from '../screens/Payments/EditPayment'
 import { Currency } from '../screens/Currency'
 
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
-import { CreatePayment } from '../screens/Payments/CreatePayment'
-import { EditPayment } from '../screens/Payments/EditPayment'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
@@ -104,6 +106,10 @@ export function AppRoutes() {
       ) : (
         <>
           <Screen name="tabs" component={MyTabs} />
+
+          <Screen name="statement" component={Statement} />
+
+          <Screen name="statementDownload" component={StatementDownload} />
 
           <Screen name="createTransaction" component={CreateTransaction} />
 

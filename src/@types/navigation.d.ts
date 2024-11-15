@@ -3,6 +3,8 @@ export declare global {
     interface RootParamList {
       login: undefined
       home: undefined
+      statement: undefined
+      statementDownload: { statement: ExchangeProps[] }
       transactions: undefined
       createTransaction: { currentTab: TypeStyleProps }
       editTransaction: { exchange: ExchangeProps }

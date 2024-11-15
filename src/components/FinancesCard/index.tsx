@@ -5,17 +5,21 @@ import { useTheme } from 'styled-components/native'
 
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
+
 type financeCardProps = {
   income: number
   expense: number
 }
 
 export function FinancesCard({ income, expense }: financeCardProps) {
-  const themes = useTheme()
   const total = income - expense
 
+  const navigation = useNavigation()
+  const themes = useTheme()
+
   return (
-    <Container>
+    <Container onPress={() => navigation.navigate('statement')}>
       <Wrapper>
         <Title>Saldo Total</Title>
         <Value>

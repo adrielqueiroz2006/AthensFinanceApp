@@ -45,7 +45,7 @@ function TabTop() {
     >
       <Tab.Screen
         name="Todos"
-        options={{ tabBarLabel: 'Todos' }}
+        options={{ tabBarLabel: 'Todas' }}
         component={AllPayments}
       />
       <Tab.Screen
@@ -55,7 +55,7 @@ function TabTop() {
       />
       <Tab.Screen
         name="Vencidos"
-        options={{ tabBarLabel: 'Vencidos' }}
+        options={{ tabBarLabel: 'Vencidas' }}
         component={ExpiredPayments}
       />
     </Tab.Navigator>

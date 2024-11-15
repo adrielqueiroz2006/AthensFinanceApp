@@ -14,7 +14,7 @@ export function EmptyPayments({ text, type }: TypeProps) {
         <Type type={type === 'vencida' ? 'vencida' : 'pendente'}>
           conta {type === 'conta' ? null : type + ' '}
         </Type>
-        {''}ainda!
+        {''} ainda!
       </Title>
     </Container>
   )

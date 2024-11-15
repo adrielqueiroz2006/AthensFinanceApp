@@ -10,12 +10,18 @@ type Category = {
   icon: string
 }
 
+type PaymentType = {
+  id: number
+  name: string
+}
+
 type TypeStyleProps = 'GANHO' | 'GASTO'
 
 type ExchangeProps = {
   id: string
   details: string
   category: Category
+  paymentType: PaymentType
   type: TypeStyleProps
   date: string
   price: string
@@ -24,6 +30,10 @@ type ExchangeProps = {
 type ExchangeContextType = {
   exchanges: ExchangeProps[]
   setExchanges: React.Dispatch<React.SetStateAction<ExchangeProps[]>>
+  iniDate: string
+  setIniDate: React.Dispatch<React.SetStateAction<string>>
+  finDate: string
+  setFinDate: React.Dispatch<React.SetStateAction<string>>
   addExchange: (newExchange: ExchangeProps) => Promise<void>
   loadExchanges: () => Promise<void>
   deleteExchange: (exchangeId: string) => Promise<void>
@@ -49,6 +59,8 @@ export const ExchangeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [exchanges, setExchanges] = useState<ExchangeProps[]>([])
+  const [iniDate, setIniDate] = useState('')
+  const [finDate, setFinDate] = useState('')
 
   function orderByDate(exchanges: ExchangeProps[]) {
     return exchanges.sort((a, b) => {
@@ -152,6 +164,10 @@ export const ExchangeProvider: React.FC<{ children: React.ReactNode }> = ({
     <ExchangeContext.Provider
       value={{
         exchanges,
+        iniDate,
+        setIniDate,
+        finDate,
+        setFinDate,
         addExchange,
         loadExchanges,
         setExchanges,
