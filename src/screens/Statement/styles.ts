@@ -25,7 +25,6 @@ export const Button = styled.TouchableOpacity`
 export const Wrapper = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
-  padding: 0 22px 22px;
 `
 
 export const FilterContainer = styled.View`
@@ -43,7 +42,7 @@ export const FilterOption = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 8px 10px;
+  padding: 5px 10px;
   border-radius: 999px;
   border-width: 1.5px;
   border-color: ${({ theme }) => theme.COLORS.GRAY_300};

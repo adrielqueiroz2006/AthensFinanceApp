@@ -72,12 +72,6 @@ export function StatementCard({
           <ExchangeCategory>{category}</ExchangeCategory>
         </ExchangeContainer>
       </ColumnLeft>
-
-      {/* <ColumnRight>
-        <IconContainer>
-          <Icon name="chevron-right" size={24} color={themes.COLORS.GRAY_900} />
-        </IconContainer>
-      </ColumnRight> */}
     </Container>
   )
 }

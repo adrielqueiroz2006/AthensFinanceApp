@@ -46,6 +46,8 @@ import BottomSheet, {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 
+import RNFS from 'react-native-fs'
+
 import { statementCategories } from '../../utils/category'
 import { statementPaymentTypes } from '../../utils/types'
 
@@ -128,9 +130,21 @@ export function Statement() {
     }
   }
 
+  async function PDFDelete() {
+    const documentsPath = `${RNFS.ExternalDirectoryPath}/Documents`
+
+    const exists = await RNFS.exists(documentsPath)
+    if (!exists) {
+      return
+    }
+
+    await RNFS.unlink(documentsPath)
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchExchanges()
+      PDFDelete()
     }, [])
   )
 
@@ -146,121 +160,133 @@ export function Statement() {
     <Container>
       <Header>
         <Title>Extrato</Title>
-        <Button
-          onPress={() =>
-            navigation.navigate('statementDownload', {
-              statement: filteredExchanges,
-            })
-          }
-        >
-          <Icon name="arrow-down" size={15} color={themes.COLORS.BACKGROUND} />
-        </Button>
+
+        {filteredExchanges.length > 0 && (
+          <>
+            <Button
+              onPress={() =>
+                navigation.navigate('statementDownload', {
+                  statement: filteredExchanges,
+                })
+              }
+            >
+              <Icon name="print" size={15} color={themes.COLORS.BACKGROUND} />
+            </Button>
+          </>
+        )}
       </Header>
 
       {exchanges.length > 0 ? (
         <>
-          <FilterContainer>
-            <FilterRow>
-              <FilterOption>
-                <Icon
-                  name="search"
-                  size={15}
-                  color={themes.COLORS.GRAY_900}
-                  style={{ paddingLeft: 10 }}
-                />
-                <SearchInput
-                  placeholder="Pesquisa"
-                  autoCorrect={false}
-                  value={search}
-                  onChangeText={setSearch}
-                />
-              </FilterOption>
-
-              <FilterOption
-                style={{ justifyContent: 'space-between' }}
-                onPress={handleOpenAction}
-              >
-                <FilterText>
-                  {iniDate.trim() !== '' ? `${iniDate} - ${finDate}` : `Datas`}
-                </FilterText>
-                <Icon
-                  name="chevron-down"
-                  size={12}
-                  color={themes.COLORS.GRAY_400}
-                  style={{ paddingRight: 10 }}
-                />
-              </FilterOption>
-            </FilterRow>
-
-            <FilterRow>
-              <Dropdown
-                style={{
-                  flex: 1,
-                  paddingHorizontal: 20,
-                  paddingVertical: 5,
-                  borderRadius: 999,
-                  borderWidth: 1.5,
-                  borderColor: themes.COLORS.GRAY_300,
-                }}
-                data={statementCategories.map((category) => ({
-                  id: category.id,
-                  name: category.name,
-                }))}
-                renderRightIcon={() => (
-                  <Icon
-                    name="chevron-down"
-                    size={12}
-                    color={themes.COLORS.GRAY_400}
-                  />
-                )}
-                value={category}
-                valueField={'name'}
-                labelField={'name'}
-                onChange={(item) => setCategory(item.name)}
-                placeholder="Categorias"
-                placeholderStyle={styles.placeholder}
-                selectedTextStyle={styles.placeholder}
-              />
-
-              <Dropdown
-                style={{
-                  flex: 1,
-                  paddingHorizontal: 20,
-                  paddingVertical: 12,
-                  borderRadius: 999,
-                  borderWidth: 1.5,
-                  borderColor: themes.COLORS.GRAY_300,
-                }}
-                data={statementPaymentTypes.map((type) => ({
-                  id: type.id,
-                  name: type.name,
-                }))}
-                renderRightIcon={() => (
-                  <Icon
-                    name="chevron-down"
-                    size={12}
-                    color={themes.COLORS.GRAY_400}
-                  />
-                )}
-                value={paymentType}
-                valueField={'name'}
-                labelField={'name'}
-                onChange={(item) => setPaymentType(item.name)}
-                placeholder="Método de transação"
-                placeholderStyle={styles.placeholder}
-                selectedTextStyle={styles.placeholder}
-              />
-            </FilterRow>
-          </FilterContainer>
-
           <Wrapper>
             <FlatList
               keyExtractor={(item) => item.id}
               data={filteredExchanges}
               showsVerticalScrollIndicator={false}
+              ListHeaderComponent={() => (
+                <>
+                  <FilterContainer>
+                    <FilterRow>
+                      <FilterOption>
+                        <Icon
+                          name="search"
+                          size={15}
+                          color={themes.COLORS.GRAY_900}
+                          style={{ paddingLeft: 10 }}
+                        />
+                        <SearchInput
+                          placeholder="Pesquisa"
+                          autoCorrect={false}
+                          value={search}
+                          onChangeText={setSearch}
+                        />
+                      </FilterOption>
+
+                      <FilterOption
+                        style={{ justifyContent: 'space-between' }}
+                        onPress={handleOpenAction}
+                      >
+                        <FilterText>
+                          {iniDate.trim() !== ''
+                            ? `${iniDate} - ${finDate}`
+                            : `Datas`}
+                        </FilterText>
+                        <Icon
+                          name="chevron-down"
+                          size={12}
+                          color={themes.COLORS.GRAY_400}
+                          style={{ paddingRight: 10 }}
+                        />
+                      </FilterOption>
+                    </FilterRow>
+
+                    <FilterRow>
+                      <Dropdown
+                        style={{
+                          flex: 1,
+                          paddingHorizontal: 20,
+                          paddingVertical: 10,
+                          borderRadius: 999,
+                          borderWidth: 1.5,
+                          borderColor: themes.COLORS.GRAY_300,
+                        }}
+                        data={statementCategories.map((category) => ({
+                          id: category.id,
+                          name: category.name,
+                        }))}
+                        renderRightIcon={() => (
+                          <Icon
+                            name="chevron-down"
+                            size={12}
+                            color={themes.COLORS.GRAY_400}
+                          />
+                        )}
+                        value={category}
+                        valueField={'name'}
+                        labelField={'name'}
+                        onChange={(item) => setCategory(item.name)}
+                        placeholder="Categorias"
+                        placeholderStyle={styles.placeholder}
+                        selectedTextStyle={styles.placeholder}
+                      />
+
+                      <Dropdown
+                        style={{
+                          flex: 1,
+                          paddingHorizontal: 20,
+                          paddingVertical: 10,
+                          borderRadius: 999,
+                          borderWidth: 1.5,
+                          borderColor: themes.COLORS.GRAY_300,
+                        }}
+                        data={statementPaymentTypes.map((type) => ({
+                          id: type.id,
+                          name: type.name,
+                        }))}
+                        renderRightIcon={() => (
+                          <Icon
+                            name="chevron-down"
+                            size={12}
+                            color={themes.COLORS.GRAY_400}
+                          />
+                        )}
+                        value={paymentType}
+                        valueField={'name'}
+                        labelField={'name'}
+                        onChange={(item) => setPaymentType(item.name)}
+                        placeholder="Método de transação"
+                        placeholderStyle={styles.placeholder}
+                        selectedTextStyle={styles.placeholder}
+                      />
+                    </FilterRow>
+                  </FilterContainer>
+                </>
+              )}
               ListEmptyComponent={() => <EmptyStatement />}
               renderItem={({ item, index }) => (
-                <View style={{ flex: 1 }}>
+                <View
+                  style={{ flex: 1, paddingHorizontal: 22, paddingBottom: 22 }}
+                >
                   {index === 0 ||
                   formatMonth(item.date) !==
                     formatMonth(filteredExchanges[index - 1].date) ? (

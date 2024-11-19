@@ -17,6 +17,8 @@ import {
 
 import auth from '@react-native-firebase/auth'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import LogoIcon from '../../assets/app-logo.png'
 
 import { Button } from '../../components/Button'
@@ -41,6 +43,8 @@ export function SignIn() {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true })
 
       const response = await GoogleSignin.signIn()
+
+      await AsyncStorage.clear()
 
       const googleCredential = auth.GoogleAuthProvider.credential(
         response.data?.idToken ?? null

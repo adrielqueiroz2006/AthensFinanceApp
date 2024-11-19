@@ -11,7 +11,7 @@ import { EmptyTransactions } from '../../components/EmptyTransactions'
 import { Transactions } from '../../components/Transactions'
 import { Statistics } from '../../components/Statistics'
 import { Container } from '../../components/Container'
-import { Wrapper } from '../../components/Wrapper'
+import { Wrapper } from '../../components/TransactionsCard/Wrapper'
 
 import { useTheme } from 'styled-components'
 import { useFocusEffect } from '@react-navigation/native'

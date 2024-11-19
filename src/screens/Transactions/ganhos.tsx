@@ -3,7 +3,7 @@ import { FlatList } from 'react-native'
 
 import { useExchanges } from '../../contexts/ExchangeContext'
 
-import { Wrapper } from '../../components/Wrapper'
+import { Wrapper } from '../../components/TransactionsCard/Wrapper'
 import { TransactionsCard } from '../../components/TransactionsCard'
 import { EmptyExchanges } from '../../components/EmptyExchanges'
 
