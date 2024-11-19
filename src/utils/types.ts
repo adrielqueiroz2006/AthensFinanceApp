@@ -49,3 +49,18 @@ export const statementPaymentTypes = [
     name: 'Dinheiro',
   },
 ]
+
+export const statementTypes = [
+  {
+    id: '0',
+    name: 'Tipo',
+  },
+  {
+    id: '1',
+    name: 'Ganho',
+  },
+  {
+    id: '2',
+    name: 'Gasto',
+  },
+]

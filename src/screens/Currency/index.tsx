@@ -1,8 +1,9 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { ScrollView, TouchableOpacity } from 'react-native'
 
-import { Container } from './styles'
+import { Header, Title, Wrapper } from './styles'
 
+import { Container } from '../../components/Container'
 import { CurrencyCard } from '../../components/CurrencyCard'
 import { CurrencyChart } from '../../components/CurrencyChart'
 
@@ -90,49 +91,55 @@ export function Currency() {
 
   return (
     <Container>
-      <ScrollView>
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => (setBaseCurrency('USD'), handleOpenAction())}
-        >
-          <CurrencyCard baseCurrency="USD" />
-        </TouchableOpacity>
+      <Wrapper>
+        <Header>
+          <Title>Cotação</Title>
+        </Header>
 
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => (setBaseCurrency('EUR'), handleOpenAction())}
-        >
-          <CurrencyCard baseCurrency="EUR" />
-        </TouchableOpacity>
+        <ScrollView>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => (setBaseCurrency('USD'), handleOpenAction())}
+          >
+            <CurrencyCard baseCurrency="USD" />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => (setBaseCurrency('GBP'), handleOpenAction())}
-        >
-          <CurrencyCard baseCurrency="GBP" />
-        </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => (setBaseCurrency('EUR'), handleOpenAction())}
+          >
+            <CurrencyCard baseCurrency="EUR" />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => (setBaseCurrency('JPY'), handleOpenAction())}
-        >
-          <CurrencyCard baseCurrency="JPY" />
-        </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => (setBaseCurrency('GBP'), handleOpenAction())}
+          >
+            <CurrencyCard baseCurrency="GBP" />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => (setBaseCurrency('BTC'), handleOpenAction())}
-        >
-          <CurrencyCard baseCurrency="BTC" />
-        </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => (setBaseCurrency('JPY'), handleOpenAction())}
+          >
+            <CurrencyCard baseCurrency="JPY" />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => (setBaseCurrency('ETH'), handleOpenAction())}
-        >
-          <CurrencyCard baseCurrency="ETH" />
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => (setBaseCurrency('BTC'), handleOpenAction())}
+          >
+            <CurrencyCard baseCurrency="BTC" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => (setBaseCurrency('ETH'), handleOpenAction())}
+          >
+            <CurrencyCard baseCurrency="ETH" />
+          </TouchableOpacity>
+        </ScrollView>
+      </Wrapper>
 
       <BottomSheet
         ref={bottomSheetRef}

@@ -8,6 +8,16 @@ export const Header = styled.View`
   justify-content: space-between;
 `
 
+export const Wrapper = styled.View`
+  flex: 1;
+  background-color: ${({ theme }) => theme.COLORS.GRAY_100};
+  padding: 12px;
+`
+
+export const TabWrapper = styled.View`
+  flex: 1;
+`
+
 export const Title = styled.Text`
   font-size: ${({ theme }) => theme.FONT_SIZE.XXL}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
@@ -21,8 +31,4 @@ export const Button = styled(TouchableOpacity)`
   align-items: center;
   justify-content: center;
   background-color: ${({ theme }) => theme.COLORS.BRAND_MID};
-`
-
-export const TabWrapper = styled.View`
-  flex: 1;
 `

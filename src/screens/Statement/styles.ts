@@ -38,7 +38,6 @@ export const FilterRow = styled.View`
 `
 
 export const FilterOption = styled.TouchableOpacity`
-  flex: 1;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -61,6 +60,24 @@ export const SearchInput = styled.TextInput`
   font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
   color: ${({ theme }) => theme.COLORS.GRAY_900};
   flex: 1;
+`
+
+export const InfoContainer = styled.View`
+  flex: 1;
+  justify-content: space-between;
+  padding: 0 22px 15px;
+`
+
+export const TotalBalanceText = styled.Text`
+  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
+  font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
+  color: ${({ theme }) => theme.COLORS.GRAY_900};
+`
+
+export const TotalBalanceValue = styled.Text`
+  font-size: ${({ theme }) => theme.FONT_SIZE.LG}px;
+  font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
+  color: ${({ theme }) => theme.COLORS.GRAY_900};
 `
 
 export const MonthContainer = styled.View`

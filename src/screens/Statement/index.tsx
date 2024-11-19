@@ -1,5 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import {
+  Dimensions,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native'
 
 import { useExchanges } from '../../contexts/ExchangeContext'
 
@@ -19,10 +25,13 @@ import {
   FilterRow,
   FilterText,
   Header,
+  InfoContainer,
   MonthContainer,
   MonthText,
   SearchInput,
   Title,
+  TotalBalanceText,
+  TotalBalanceValue,
   Wrapper,
 } from './styles'
 
@@ -50,6 +59,7 @@ import RNFS from 'react-native-fs'
 
 import { statementCategories } from '../../utils/category'
 import { statementPaymentTypes } from '../../utils/types'
+import { statementTypes } from '../../utils/types'
 
 import { EmptyStatement } from '../../components/EmptyStatement'
 import { EmptyTransactionsStatement } from '../../components/EmptyTransactionsStatement'
@@ -61,6 +71,7 @@ export function Statement() {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('Categorias')
   const [paymentType, setPaymentType] = useState('Método')
+  const [type, setType] = useState('Tipo')
 
   const navigation = useNavigation()
   const themes = useTheme()
@@ -102,6 +113,9 @@ export function Statement() {
         )
       })
     }
+    if (type !== 'Tipo') {
+      filtered = filtered.filter((item) => item.type === type.toUpperCase())
+    }
     if (category !== 'Categorias') {
       filtered = filtered.filter((item) => item.category.name === category)
     }
@@ -116,7 +130,21 @@ export function Statement() {
       )
     }
     return filtered
-  }, [exchanges, category, paymentType, search, iniDate])
+  }, [exchanges, type, category, paymentType, search, iniDate])
+
+  const incomes = filteredExchanges.filter((item) => item.type === 'GANHO')
+  const totalIncomes = incomes.reduce(
+    (total, item) => total + Number(item.price),
+    0
+  )
+
+  const expenses = filteredExchanges.filter((item) => item.type === 'GASTO')
+  const totalExpenses = expenses.reduce(
+    (total, item) => total + Number(item.price),
+    0
+  )
+
+  const totalBalance = Number(totalIncomes) - Number(totalExpenses)
 
   function formatMonth(date: string) {
     return format(parse(date, 'dd/MM/yy', new Date()), 'MMMM', { locale: ptBR })
@@ -160,20 +188,6 @@ export function Statement() {
     <Container>
       <Header>
         <Title>Extrato</Title>
-
-        {filteredExchanges.length > 0 && (
-          <>
-            <Button
-              onPress={() =>
-                navigation.navigate('statementDownload', {
-                  statement: filteredExchanges,
-                })
-              }
-            >
-              <Icon name="print" size={15} color={themes.COLORS.BACKGROUND} />
-            </Button>
-          </>
-        )}
       </Header>
 
       {exchanges.length > 0 ? (
@@ -185,9 +199,37 @@ export function Statement() {
               showsVerticalScrollIndicator={false}
               ListHeaderComponent={() => (
                 <>
+                  <InfoContainer style={{ flex: 1, flexDirection: 'row' }}>
+                    <View>
+                      <TotalBalanceText>Saldo Total </TotalBalanceText>
+                      <TotalBalanceValue>
+                        {totalBalance < 0 && '-'}R${' '}
+                        {totalBalance.toFixed(2).replace('.', ',')}
+                      </TotalBalanceValue>
+                    </View>
+
+                    {filteredExchanges.length > 0 && (
+                      <>
+                        <Button
+                          onPress={() =>
+                            navigation.navigate('statementDownload', {
+                              statement: filteredExchanges,
+                            })
+                          }
+                        >
+                          <Icon
+                            name="print"
+                            size={15}
+                            color={themes.COLORS.BACKGROUND}
+                          />
+                        </Button>
+                      </>
+                    )}
+                  </InfoContainer>
+
                   <FilterContainer>
                     <FilterRow>
-                      <FilterOption>
+                      <FilterOption style={{ width: '60%' }}>
                         <Icon
                           name="search"
                           size={15}
@@ -196,6 +238,7 @@ export function Statement() {
                         />
                         <SearchInput
                           placeholder="Pesquisa"
+                          placeholderTextColor={themes.COLORS.GRAY_900}
                           autoCorrect={false}
                           value={search}
                           onChangeText={setSearch}
@@ -203,7 +246,7 @@ export function Statement() {
                       </FilterOption>
 
                       <FilterOption
-                        style={{ justifyContent: 'space-between' }}
+                        style={{ flex: 1, justifyContent: 'space-between' }}
                         onPress={handleOpenAction}
                       >
                         <FilterText>
@@ -220,65 +263,113 @@ export function Statement() {
                       </FilterOption>
                     </FilterRow>
 
-                    <FilterRow>
-                      <Dropdown
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                    >
+                      <View
                         style={{
-                          flex: 1,
-                          paddingHorizontal: 20,
-                          paddingVertical: 10,
-                          borderRadius: 999,
-                          borderWidth: 1.5,
-                          borderColor: themes.COLORS.GRAY_300,
+                          flexDirection: 'row',
+                          width: Dimensions.get('screen').width / 2 - 6,
                         }}
-                        data={statementCategories.map((category) => ({
-                          id: category.id,
-                          name: category.name,
-                        }))}
-                        renderRightIcon={() => (
-                          <Icon
-                            name="chevron-down"
-                            size={12}
-                            color={themes.COLORS.GRAY_400}
-                          />
-                        )}
-                        value={category}
-                        valueField={'name'}
-                        labelField={'name'}
-                        onChange={(item) => setCategory(item.name)}
-                        placeholder="Categorias"
-                        placeholderStyle={styles.placeholder}
-                        selectedTextStyle={styles.placeholder}
-                      />
+                      >
+                        <Dropdown
+                          style={{
+                            flex: 1,
+                            paddingHorizontal: 20,
+                            paddingVertical: 10,
+                            marginRight: 5,
+                            borderRadius: 999,
+                            borderWidth: 1.5,
+                            borderColor: themes.COLORS.GRAY_300,
+                          }}
+                          data={statementTypes.map((type) => ({
+                            id: type.id,
+                            name: type.name,
+                          }))}
+                          renderRightIcon={() => (
+                            <Icon
+                              name="chevron-down"
+                              size={12}
+                              color={themes.COLORS.GRAY_400}
+                            />
+                          )}
+                          value={type}
+                          valueField={'name'}
+                          labelField={'name'}
+                          onChange={(item) => setType(item.name)}
+                          placeholder="Tipo"
+                          placeholderStyle={styles.placeholder}
+                          selectedTextStyle={styles.placeholder}
+                        />
+                      </View>
 
-                      <Dropdown
+                      <View
                         style={{
-                          flex: 1,
-                          paddingHorizontal: 20,
-                          paddingVertical: 10,
-                          borderRadius: 999,
-                          borderWidth: 1.5,
-                          borderColor: themes.COLORS.GRAY_300,
+                          flexDirection: 'row',
+                          width: Dimensions.get('screen').width - 16,
                         }}
-                        data={statementPaymentTypes.map((type) => ({
-                          id: type.id,
-                          name: type.name,
-                        }))}
-                        renderRightIcon={() => (
-                          <Icon
-                            name="chevron-down"
-                            size={12}
-                            color={themes.COLORS.GRAY_400}
-                          />
-                        )}
-                        value={paymentType}
-                        valueField={'name'}
-                        labelField={'name'}
-                        onChange={(item) => setPaymentType(item.name)}
-                        placeholder="Método de transação"
-                        placeholderStyle={styles.placeholder}
-                        selectedTextStyle={styles.placeholder}
-                      />
-                    </FilterRow>
+                      >
+                        <Dropdown
+                          style={{
+                            flex: 1,
+                            paddingHorizontal: 20,
+                            paddingVertical: 10,
+                            marginRight: 5,
+                            borderRadius: 999,
+                            borderWidth: 1.5,
+                            borderColor: themes.COLORS.GRAY_300,
+                          }}
+                          data={statementCategories.map((category) => ({
+                            id: category.id,
+                            name: category.name,
+                          }))}
+                          renderRightIcon={() => (
+                            <Icon
+                              name="chevron-down"
+                              size={12}
+                              color={themes.COLORS.GRAY_400}
+                            />
+                          )}
+                          value={category}
+                          valueField={'name'}
+                          labelField={'name'}
+                          onChange={(item) => setCategory(item.name)}
+                          placeholder="Categorias"
+                          placeholderStyle={styles.placeholder}
+                          selectedTextStyle={styles.placeholder}
+                        />
+
+                        <Dropdown
+                          style={{
+                            flex: 1,
+                            paddingHorizontal: 20,
+                            paddingVertical: 10,
+                            borderRadius: 999,
+                            borderWidth: 1.5,
+                            borderColor: themes.COLORS.GRAY_300,
+                          }}
+                          data={statementPaymentTypes.map((type) => ({
+                            id: type.id,
+                            name: type.name,
+                          }))}
+                          renderRightIcon={() => (
+                            <Icon
+                              name="chevron-down"
+                              size={12}
+                              color={themes.COLORS.GRAY_400}
+                            />
+                          )}
+                          value={paymentType}
+                          valueField={'name'}
+                          labelField={'name'}
+                          onChange={(item) => setPaymentType(item.name)}
+                          placeholder="Método de transação"
+                          placeholderStyle={styles.placeholder}
+                          selectedTextStyle={styles.placeholder}
+                        />
+                      </View>
+                    </ScrollView>
                   </FilterContainer>
                 </>
               )}

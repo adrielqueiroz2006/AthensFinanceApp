@@ -12,7 +12,6 @@ export const Wrapper = styled.View`
   flex-direction: row;
   align-items: center;
   background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
-
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
 `
