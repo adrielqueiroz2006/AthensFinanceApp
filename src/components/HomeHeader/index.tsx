@@ -53,7 +53,7 @@ export function HomeHeader() {
         <Greeting>
           <Message>Seja bem-vindo,</Message>
 
-          <Name>{user?.displayName}</Name>
+          <Name>Adriel Queiroz</Name>
         </Greeting>
 
         <Switch

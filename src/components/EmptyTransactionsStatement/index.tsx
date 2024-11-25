@@ -5,7 +5,7 @@ export function EmptyTransactionsStatement() {
   return (
     <Container>
       <Title>
-        Você não cadastrou nenhuma <Bold>Transação</Bold> ainda!
+        Você não cadastrou nenhuma <Bold>transação</Bold> ainda!
       </Title>
     </Container>
   )

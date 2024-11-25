@@ -198,33 +198,34 @@ export function Statement() {
               data={filteredExchanges}
               showsVerticalScrollIndicator={false}
               ListHeaderComponent={() => (
-                <>
-                  <InfoContainer style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={{ flex: 1 }}>
+                  <InfoContainer>
                     <View>
                       <TotalBalanceText>Saldo Total </TotalBalanceText>
                       <TotalBalanceValue>
-                        {totalBalance < 0 && '-'}R${' '}
-                        {totalBalance.toFixed(2).replace('.', ',')}
+                        {Number(totalBalance) >= 0
+                          ? `R$ ${Number(totalBalance)
+                              .toFixed(2)
+                              .replace('.', ',')}`
+                          : `-R$ ${Number(-totalBalance)
+                              .toFixed(2)
+                              .replace('.', ',')}`}
                       </TotalBalanceValue>
                     </View>
 
-                    {filteredExchanges.length > 0 && (
-                      <>
-                        <Button
-                          onPress={() =>
-                            navigation.navigate('statementDownload', {
-                              statement: filteredExchanges,
-                            })
-                          }
-                        >
-                          <Icon
-                            name="print"
-                            size={15}
-                            color={themes.COLORS.BACKGROUND}
-                          />
-                        </Button>
-                      </>
-                    )}
+                    <Button
+                      onPress={() =>
+                        navigation.navigate('statementDownload', {
+                          statement: filteredExchanges,
+                        })
+                      }
+                    >
+                      <Icon
+                        name="print"
+                        size={15}
+                        color={themes.COLORS.BACKGROUND}
+                      />
+                    </Button>
                   </InfoContainer>
 
                   <FilterContainer>
@@ -371,7 +372,7 @@ export function Statement() {
                       </View>
                     </ScrollView>
                   </FilterContainer>
-                </>
+                </View>
               )}
               ListEmptyComponent={() => <EmptyStatement />}
               renderItem={({ item, index }) => (

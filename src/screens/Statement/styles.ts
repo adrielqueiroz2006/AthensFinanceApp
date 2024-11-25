@@ -64,6 +64,7 @@ export const SearchInput = styled.TextInput`
 
 export const InfoContainer = styled.View`
   flex: 1;
+  flex-direction: row;
   justify-content: space-between;
   padding: 0 22px 15px;
 `

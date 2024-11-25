@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, View } from 'react-native'
 
 import { useExchanges } from '../../contexts/ExchangeContext'
 
@@ -43,25 +43,27 @@ export function Gastos() {
           keyExtractor={(item) => item.id}
           data={exchanges.filter((item) => item.type === 'GASTO')}
           renderItem={({ item }) => (
-            <Swipeable
-              ref={cardActionsSwipeable}
-              key={item.id}
-              renderRightActions={() => (
-                <TransactionsCardActions exchange={item} />
-              )}
-              overshootRight={false}
-            >
-              <NewTransactionsCard
+            <View style={{ paddingBottom: 15 }}>
+              <Swipeable
+                ref={cardActionsSwipeable}
                 key={item.id}
-                details={item.details}
-                category={item.category.name}
-                paymentType={item.paymentType.name}
-                type={item.type}
-                icon={item.category.icon}
-                date={item.date}
-                value={item.price.toString().replace('.', ',')}
-              />
-            </Swipeable>
+                renderRightActions={() => (
+                  <TransactionsCardActions exchange={item} />
+                )}
+                overshootRight={false}
+              >
+                <NewTransactionsCard
+                  key={item.id}
+                  details={item.details}
+                  category={item.category.name}
+                  paymentType={item.paymentType.name}
+                  type={item.type}
+                  icon={item.category.icon}
+                  date={item.date}
+                  value={item.price.toString().replace('.', ',')}
+                />
+              </Swipeable>
+            </View>
           )}
         />
       ) : (
