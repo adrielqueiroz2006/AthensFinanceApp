@@ -127,7 +127,8 @@ export function CreatePayment() {
         (date.getTime() - today.getTime()) / 1000
       )
 
-      console.log(`noticação agendada para ${secondsForNotification} segundos`)
+      if (secondsForNotification <= 0) return
+
       Notifications.scheduleNotificationAsync({
         content: {
           title: 'Lembrete de conta',
