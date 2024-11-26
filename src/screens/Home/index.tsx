@@ -5,13 +5,15 @@ import { useExchanges } from '../../contexts/ExchangeContext'
 
 import 'react-native-get-random-values'
 
+import * as Notifications from 'expo-notifications'
+
 import { HomeHeader } from '../../components/HomeHeader'
 import { FinancesCard } from '../../components/FinancesCard'
+import { Wrapper } from '../../components/TransactionsCard/Wrapper'
 import { EmptyTransactions } from '../../components/EmptyTransactions'
 import { Transactions } from '../../components/Transactions'
 import { Statistics } from '../../components/Statistics'
 import { Container } from '../../components/Container'
-import { Wrapper } from '../../components/TransactionsCard/Wrapper'
 
 import { useTheme } from 'styled-components'
 import { useFocusEffect } from '@react-navigation/native'
@@ -21,7 +23,7 @@ export function Home() {
   const themes = useTheme()
 
   const { exchanges, loadExchanges } = useExchanges()
-  const { loadPayments, deleteAllPayments } = usePayments()
+  const { loadPayments, setNotifications } = usePayments()
 
   async function fetchData() {
     try {
@@ -32,9 +34,37 @@ export function Home() {
     }
   }
 
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }),
+  })
+
+  async function requestNotificationPermission() {
+    const { status } = await Notifications.getPermissionsAsync()
+    if (status !== 'granted') {
+      const { status: newStatus } =
+        await Notifications.requestPermissionsAsync()
+      if (newStatus !== 'granted') {
+        return false
+      }
+    }
+    return true
+  }
+
+  async function checkNotificationPermission() {
+    const notificationPermission = await requestNotificationPermission()
+    setNotifications(notificationPermission)
+
+    return
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchData()
+      checkNotificationPermission()
     }, [])
   )
 

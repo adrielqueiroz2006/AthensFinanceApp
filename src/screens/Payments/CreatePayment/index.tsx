@@ -18,6 +18,8 @@ import {
 
 import { useTheme } from 'styled-components/native'
 
+import * as Notifications from 'expo-notifications'
+
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker'
@@ -33,6 +35,7 @@ import { Picker } from '@react-native-picker/picker'
 
 import { categories } from '../../../utils/category'
 import { types } from '../../../utils/types'
+import { isToday, parse } from 'date-fns'
 
 type PaymentType = {
   id: number
@@ -55,7 +58,7 @@ type PaymentProps = {
 }
 
 export function CreatePayment() {
-  const { addPayment } = usePayments()
+  const { addPayment, notifications } = usePayments()
 
   const [type, setType] = useState({
     id: 1,
@@ -96,6 +99,52 @@ export function CreatePayment() {
     onChangeFixedDate()
   }
 
+  async function schedulePaymentNotification() {
+    const grantedPermission = notifications
+    if (!grantedPermission) return
+
+    const paymentDate = parse(fixedDate, 'dd/MM/yy', new Date())
+
+    if (isToday(paymentDate)) {
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Lembrete de conta',
+          body: `A conta ${
+            details.trim() !== '' ? details + ', ' : ''
+          }valor R$${Number(price)
+            .toFixed(2)
+            .replace(
+              '.',
+              ','
+            )}, categoria ${category.name.toLowerCase()}, vence hoje!`,
+        },
+        trigger: { seconds: 5 },
+      })
+    } else {
+      const today = new Date()
+
+      const secondsForNotification = Math.round(
+        (date.getTime() - today.getTime()) / 1000
+      )
+
+      console.log(`noticação agendada para ${secondsForNotification} segundos`)
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Lembrete de conta',
+          body: `A conta ${
+            details.trim() !== '' ? details + ', ' : ''
+          }valor R$${Number(price)
+            .toFixed(2)
+            .replace(
+              '.',
+              ','
+            )}, categoria ${category.name.toLowerCase()}, vence hoje!`,
+        },
+        trigger: secondsForNotification,
+      })
+    }
+  }
+
   async function handleAddPayment({
     id,
     details,
@@ -121,6 +170,7 @@ export function CreatePayment() {
 
     try {
       await addPayment(newPayment)
+      schedulePaymentNotification()
     } catch (error) {
       console.log(error)
     }

@@ -47,7 +47,7 @@ export function PaymentsCard({
     } else if (differenceDays === -1) {
       return 'Venceu Ontem'
     } else if (differenceDays < -1) {
-      return `Venceu há ${Math.abs(differenceDays)} dias atrás`
+      return `Venceu há ${Math.abs(differenceDays)} dias`
     } else if (differenceDays === 1) {
       return 'Vence amanhã'
     } else {

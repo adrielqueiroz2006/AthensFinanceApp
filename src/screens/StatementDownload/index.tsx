@@ -72,6 +72,7 @@ export function StatementDownload() {
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const year = String(date.getFullYear()).slice(-2)
   const fixedDateString = `${day}-${month}-${year}`
+  const fixedDateStatement = `${day}/${month}/${year}`
 
   const incomes = statement.filter((item) => item.type === 'GANHO')
   const totalIncomes = incomes.reduce(
@@ -87,15 +88,7 @@ export function StatementDownload() {
 
   const totalBalance = Number(totalIncomes) - Number(totalExpenses)
 
-  const getAssetUri = async () => {
-    const asset = Asset.fromModule(require('../../icons/icon.png'))
-    await asset.downloadAsync()
-    return asset.localUri
-  }
-
   async function PDFCreate() {
-    const assetUri = await getAssetUri()
-
     const contentPage = `
       <html lang="pt-BR">
         <head>
@@ -171,7 +164,7 @@ export function StatementDownload() {
             }
             #user-statement .grid-row {
               display: grid;
-              grid-template-columns: 1fr 3fr repeat(2, 1fr);
+              grid-template-columns: 1fr 2fr  2fr 1fr;
               grid-template-rows: 1fr;
               grid-column-gap: 0.5rem;
               grid-row-gap: 0px;
@@ -191,7 +184,7 @@ export function StatementDownload() {
         </head>
         <body>
           <div id="date">
-            <p>22/08/2006</p>
+            <p>${fixedDateStatement}</p>
           </div>
           <div id="principal">
             <header>

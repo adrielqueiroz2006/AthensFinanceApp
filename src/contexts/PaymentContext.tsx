@@ -38,6 +38,8 @@ type ExchangeProps = {
 }
 
 type PaymentContextType = {
+  notifications: boolean
+  setNotifications: React.Dispatch<React.SetStateAction<boolean>>
   payments: PaymentProps[]
   setPayments: React.Dispatch<React.SetStateAction<PaymentProps[]>>
   addPayment: (newPayment: PaymentProps) => Promise<void>
@@ -61,6 +63,7 @@ export function usePayments() {
 export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [notifications, setNotifications] = useState(false)
   const [payments, setPayments] = useState<PaymentProps[]>([])
   const { addExchange } = useExchanges()
 
@@ -191,6 +194,8 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <PaymentContext.Provider
       value={{
+        notifications,
+        setNotifications,
         payments,
         addPayment,
         loadPayments,
